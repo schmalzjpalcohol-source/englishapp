@@ -220,6 +220,7 @@ let selectedDayIndex = 1;
 let selectedStudyIndex = 0;
 let selectedDayCards = [];
 let studyFrontLang = "en";
+let quizDirection = "ja-en";
 
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
@@ -625,10 +626,15 @@ function moveStudyCard(direction) {
 
 function renderQuiz() {
   const [prompt, answer] = quizItems[quizIndex];
-  quizPrompt.textContent = prompt;
-  quizAnswer.textContent = answer;
+  const isJapaneseFirst = quizDirection === "ja-en";
+  quizPrompt.textContent = isJapaneseFirst ? prompt : answer;
+  quizAnswer.textContent = isJapaneseFirst ? answer : prompt;
   renderWordMap({ english: answer, japanese: prompt }, quizWordMap);
   quizCard.classList.remove("is-flipped");
+
+  document.querySelectorAll("[data-quiz-dir]").forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.quizDir === quizDirection);
+  });
 }
 
 function moveQuiz(direction) {
@@ -641,6 +647,13 @@ document.addEventListener("click", (event) => {
   if (frontButton) {
     studyFrontLang = frontButton.dataset.frontLang;
     renderStudyCard();
+    return;
+  }
+
+  const quizDirectionButton = event.target.closest("[data-quiz-dir]");
+  if (quizDirectionButton) {
+    quizDirection = quizDirectionButton.dataset.quizDir;
+    renderQuiz();
     return;
   }
 

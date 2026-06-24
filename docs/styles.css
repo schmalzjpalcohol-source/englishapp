@@ -520,6 +520,10 @@ h3 {
   border: 0;
 }
 
+.quiz-direction {
+  margin-bottom: 0.75rem;
+}
+
 .front-toggle button {
   display: flex;
   min-height: 3rem;

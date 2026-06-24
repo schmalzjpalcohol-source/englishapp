@@ -226,6 +226,16 @@
         </div>
 
         <div class="quiz-shell">
+          <div class="front-toggle quiz-direction" aria-label="練習の方向">
+            <button class="is-selected" data-quiz-dir="ja-en" type="button">
+              <span>JP</span>
+              日本語 → English
+            </button>
+            <button data-quiz-dir="en-ja" type="button">
+              <span>EN</span>
+              English → 日本語
+            </button>
+          </div>
           <div class="quiz-card" id="quizCard" tabindex="0" role="button" aria-live="polite">
             <p class="quiz-kicker"><span aria-hidden="true">☝</span> Tap</p>
             <h3 id="quizPrompt">気をつけて。</h3>
