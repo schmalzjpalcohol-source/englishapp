@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Green Step English</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Green Step English">
+        <span class="brand-mark">G</span>
+        <span>Green Step English</span>
+      </a>
+      <nav class="nav" aria-label="メインナビゲーション">
+        <a href="#steps">ステップ</a>
+        <a href="#work">職場フレーズ</a>
+        <a href="#practice">練習</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">For Japanese beginners</p>
+          <h1>英語を、仕事で使える順番で。</h1>
+          <p class="lead">
+            I / you / me / them から、現場で聞こえる短い指示まで。
+            1日5分で見て、声に出して、少しずつ覚えるためのミニアプリです。
+          </p>
+          <div class="hero-actions">
+            <a class="primary-action" href="#steps">はじめる</a>
+            <a class="secondary-action" href="#work">フレーズを見る</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="今日のミニレッスン">
+          <div class="panel-topline">
+            <span>Today</span>
+            <strong>8 min</strong>
+          </div>
+          <p class="mini-label">聞こえたらすぐ反応</p>
+          <h2>Be careful.</h2>
+          <p>気をつけて。</p>
+          <div class="sound-row">
+            <button class="sound-button" data-speak="Be careful.">▶</button>
+            <span>/bi ker-fuhl/</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-band" aria-label="学習の流れ">
+        <div>
+          <strong>4</strong>
+          <span>基本ステップ</span>
+        </div>
+        <div>
+          <strong>24</strong>
+          <span>重要フレーズ</span>
+        </div>
+        <div>
+          <strong>5分</strong>
+          <span>毎日の練習</span>
+        </div>
+      </section>
+
+      <section class="section intro-section" id="steps">
+        <div class="section-heading">
+          <p class="eyebrow">Step by step</p>
+          <h2>まずは「誰が・誰を」をつかむ</h2>
+          <p>
+            英語は短くても、誰のことかが大事です。仕事の会話でよく出る形から覚えます。
+          </p>
+        </div>
+
+        <div class="lesson-grid">
+          <article class="lesson-card">
+            <span class="step-number">01</span>
+            <h3>I / me</h3>
+            <p class="jp">I = 私が、me = 私に / 私を</p>
+            <ul>
+              <li><button data-speak="I can do it.">I can do it.</button><span>私ができます。</span></li>
+              <li><button data-speak="Please tell me.">Please tell me.</button><span>私に教えてください。</span></li>
+            </ul>
+          </article>
+          <article class="lesson-card">
+            <span class="step-number">02</span>
+            <h3>You / your</h3>
+            <p class="jp">you = あなた、your = あなたの</p>
+            <ul>
+              <li><button data-speak="Are you ready?">Are you ready?</button><span>準備できましたか。</span></li>
+              <li><button data-speak="Is this your bag?">Is this your bag?</button><span>これはあなたのバッグですか。</span></li>
+            </ul>
+          </article>
+          <article class="lesson-card">
+            <span class="step-number">03</span>
+            <h3>He / she / they</h3>
+            <p class="jp">he = 彼、she = 彼女、they = 彼ら / その人たち</p>
+            <ul>
+              <li><button data-speak="She is on break.">She is on break.</button><span>彼女は休憩中です。</span></li>
+              <li><button data-speak="They are waiting.">They are waiting.</button><span>彼らは待っています。</span></li>
+            </ul>
+          </article>
+          <article class="lesson-card">
+            <span class="step-number">04</span>
+            <h3>Us / them</h3>
+            <p class="jp">us = 私たちに、them = 彼らに / それらを</p>
+            <ul>
+              <li><button data-speak="Please help us.">Please help us.</button><span>私たちを手伝ってください。</span></li>
+              <li><button data-speak="Put them here.">Put them here.</button><span>それらをここに置いてください。</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section phrase-section" id="work">
+        <div class="section-heading">
+          <p class="eyebrow">Workplace phrases</p>
+          <h2>職場で聞こえやすい短い英語</h2>
+          <p>倉庫、工場、カフェ、ホテル、オフィスで使える「短くて強い」表現です。</p>
+        </div>
+
+        <div class="phrase-list" id="phraseList"></div>
+      </section>
+
+      <section class="section practice-section" id="practice">
+        <div class="section-heading">
+          <p class="eyebrow">Practice</p>
+          <h2>今日の3問チェック</h2>
+          <p>カードを押して答えを見ます。発音ボタンで何度でも聞けます。</p>
+        </div>
+
+        <div class="quiz-shell">
+          <div class="quiz-card" id="quizCard" tabindex="0" role="button" aria-live="polite">
+            <p class="quiz-kicker">Tap to flip</p>
+            <h3 id="quizPrompt">気をつけて。</h3>
+            <p id="quizAnswer">Be careful.</p>
+          </div>
+          <div class="quiz-controls">
+            <button class="icon-action" id="prevQuiz" aria-label="前の問題">←</button>
+            <button class="primary-action" id="speakQuiz">聞く</button>
+            <button class="icon-action" id="nextQuiz" aria-label="次の問題">→</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Green Step English</p>
+      <p>Scroll, listen, repeat. Small steps every day.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
