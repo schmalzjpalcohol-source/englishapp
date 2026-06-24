@@ -53,58 +53,104 @@ const phrases = [
   ["I'll ask my supervisor.", "上司に聞きます。", "reply"],
   ["Thank you for your help.", "手伝ってくれてありがとうございます。", "polite"],
   ["Sorry, I didn't hear you.", "すみません、聞こえませんでした。", "reply"],
+  ["I'm working by the entrance.", "私は入口のそばで働いています。", "place"],
+  ["I'm working by the register.", "私はレジのそばで働いています。", "place"],
+  ["I'm working by the loading area.", "私は荷物搬入口のそばで働いています。", "place"],
+  ["I'm working near the stockroom.", "私は在庫室の近くで働いています。", "place"],
+  ["I'm working at station three.", "私は3番ステーションで働いています。", "place"],
+  ["I'm working on the packing line.", "私は梱包ラインで働いています。", "place"],
+  ["I'm working under my supervisor.", "私は上司の指示で働いています。", "team"],
+  ["I'm working with a trainer today.", "今日はトレーナーと働いています。", "team"],
+  ["Please show me where to stand.", "どこに立てばいいか見せてください。", "question"],
+  ["Where is my station?", "私の作業場所はどこですか。", "question"],
+  ["Where do I clock in?", "どこで出勤打刻しますか。", "question"],
+  ["Where do I clock out?", "どこで退勤打刻しますか。", "question"],
+  ["Who do I report to?", "誰に報告すればいいですか。", "question"],
+  ["Can you show me an example?", "例を見せてくれますか。", "question"],
+  ["Can you speak more slowly?", "もう少しゆっくり話してくれますか。", "question"],
+  ["Should I wear a mask?", "マスクをつけるべきですか。", "safety"],
+  ["Should I wash my hands first?", "先に手を洗うべきですか。", "safety"],
+  ["This area is slippery.", "この場所は滑りやすいです。", "safety"],
+  ["The box is damaged.", "箱が壊れています。", "problem"],
+  ["The label is missing.", "ラベルがありません。", "problem"],
+  ["The order is wrong.", "注文が違います。", "problem"],
+  ["I need a new one.", "新しいものが必要です。", "request"],
+  ["I need more supplies.", "備品がもっと必要です。", "request"],
+  ["I'm going to break.", "休憩に行きます。", "status"],
+  ["I'm back from break.", "休憩から戻りました。", "status"],
 ];
 
-const departments = [
-  ["kitchen", "キッチン"],
-  ["warehouse", "倉庫"],
-  ["cleaning", "清掃"],
-  ["service", "サービス"],
-  ["front desk", "フロント"],
-  ["quality control", "品質管理"],
-  ["customer service", "カスタマーサービス"],
-  ["packing", "梱包"],
+const workAreas = [
+  { department: "kitchen", place: "the kitchen", jp: "キッチン" },
+  { department: "warehouse", place: "the warehouse", jp: "倉庫" },
+  { department: "cleaning", place: "the cleaning area", jp: "清掃エリア" },
+  { department: "service", place: "the service area", jp: "サービスエリア" },
+  { department: "front desk", place: "the front desk", jp: "フロント" },
+  { department: "quality control", place: "quality control", jp: "品質管理" },
+  { department: "customer service", place: "customer service", jp: "カスタマーサービス" },
+  { department: "packing", place: "the packing line", jp: "梱包ライン" },
+  { department: "receiving", place: "the receiving area", jp: "受け取りエリア" },
+  { department: "shipping", place: "the shipping area", jp: "出荷エリア" },
+  { department: "stockroom", place: "the stockroom", jp: "在庫室" },
+  { department: "register", place: "the register", jp: "レジ" },
+  { department: "entrance", place: "the entrance", jp: "入口" },
+  { department: "loading area", place: "the loading area", jp: "荷物搬入口" },
 ];
 
 const patterns = [
   {
     label: "I'm working in the ... department.",
     help: "私は...部門で働いています。",
-    build: (department, jp) => [
-      `I'm working in the ${department} department.`,
-      `私は${jp}部門で働いています。`,
+    build: (area) => [
+      `I'm working in the ${area.department} department.`,
+      `私は${area.jp}部門で働いています。`,
     ],
   },
   {
     label: "I work in ...",
     help: "私は...で働いています。",
-    build: (department, jp) => [`I work in ${department}.`, `私は${jp}で働いています。`],
+    build: (area) => [`I work in ${area.department}.`, `私は${area.jp}で働いています。`],
+  },
+  {
+    label: "I'm working by ...",
+    help: "私は...のそばで働いています。",
+    build: (area) => [`I'm working by ${area.place}.`, `私は${area.jp}のそばで働いています。`],
+  },
+  {
+    label: "I'm working near ...",
+    help: "私は...の近くで働いています。",
+    build: (area) => [`I'm working near ${area.place}.`, `私は${area.jp}の近くで働いています。`],
+  },
+  {
+    label: "I'm working at ...",
+    help: "私は...で働いています。",
+    build: (area) => [`I'm working at ${area.place}.`, `私は${area.jp}で働いています。`],
   },
   {
     label: "I'm helping in ... today.",
     help: "今日は...を手伝っています。",
-    build: (department, jp) => [
-      `I'm helping in ${department} today.`,
-      `今日は${jp}を手伝っています。`,
+    build: (area) => [
+      `I'm helping in ${area.department} today.`,
+      `今日は${area.jp}を手伝っています。`,
     ],
   },
   {
     label: "Please take me to ...",
     help: "...へ連れて行ってください。",
-    build: (department, jp) => [`Please take me to ${department}.`, `${jp}へ連れて行ってください。`],
+    build: (area) => [`Please take me to ${area.place}.`, `${area.jp}へ連れて行ってください。`],
   },
   {
     label: "Who is in charge of ...?",
     help: "...の担当者は誰ですか。",
-    build: (department, jp) => [
-      `Who is in charge of ${department}?`,
-      `${jp}の担当者は誰ですか。`,
+    build: (area) => [
+      `Who is in charge of ${area.department}?`,
+      `${area.jp}の担当者は誰ですか。`,
     ],
   },
   {
     label: "Do I report to ...?",
     help: "...に報告しますか。",
-    build: (department, jp) => [`Do I report to ${department}?`, `${jp}に報告しますか。`],
+    build: (area) => [`Do I report to ${area.department}?`, `${area.jp}に報告しますか。`],
   },
 ];
 
@@ -119,6 +165,10 @@ const quizItems = [
   ["担当者は誰ですか。", "Who is in charge?"],
   ["これは急ぎですか。", "Is this urgent?"],
   ["上司に聞きます。", "I'll ask my supervisor."],
+  ["私は入口のそばで働いています。", "I'm working by the entrance."],
+  ["私の作業場所はどこですか。", "Where is my station?"],
+  ["もう少しゆっくり話してくれますか。", "Can you speak more slowly?"],
+  ["箱が壊れています。", "The box is damaged."],
 ];
 
 const phraseList = document.querySelector("#phraseList");
@@ -135,7 +185,7 @@ const prevQuiz = document.querySelector("#prevQuiz");
 const nextQuiz = document.querySelector("#nextQuiz");
 
 let quizIndex = 0;
-let selectedDepartment = 0;
+let selectedArea = 0;
 let selectedPattern = 0;
 
 function speak(text) {
@@ -165,12 +215,12 @@ function renderPhrases() {
 }
 
 function renderBuilderOptions() {
-  departmentOptions.innerHTML = departments
+  departmentOptions.innerHTML = workAreas
     .map(
-      ([department, jp], index) => `
-        <button class="choice-button ${index === selectedDepartment ? "is-selected" : ""}" data-department="${index}">
-          ${department}<br />
-          <span>${jp}</span>
+      (area, index) => `
+        <button class="choice-button ${index === selectedArea ? "is-selected" : ""}" data-department="${index}">
+          ${area.place}<br />
+          <span>${area.jp}</span>
         </button>
       `,
     )
@@ -189,8 +239,7 @@ function renderBuilderOptions() {
 }
 
 function renderBuiltSentence() {
-  const [department, jp] = departments[selectedDepartment];
-  const [english, japanese] = patterns[selectedPattern].build(department, jp);
+  const [english, japanese] = patterns[selectedPattern].build(workAreas[selectedArea]);
   builtSentence.textContent = english;
   builtJapanese.textContent = japanese;
 }
@@ -215,7 +264,7 @@ document.addEventListener("click", (event) => {
 
   const departmentButton = event.target.closest("[data-department]");
   if (departmentButton) {
-    selectedDepartment = Number(departmentButton.dataset.department);
+    selectedArea = Number(departmentButton.dataset.department);
     renderBuilderOptions();
     renderBuiltSentence();
   }
