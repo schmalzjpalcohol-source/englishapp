@@ -200,6 +200,7 @@ const studyCard = document.querySelector("#studyCard");
 const studyCardType = document.querySelector("#studyCardType");
 const studyPrompt = document.querySelector("#studyPrompt");
 const studyAnswer = document.querySelector("#studyAnswer");
+const wordMap = document.querySelector("#wordMap");
 const speakStudyCard = document.querySelector("#speakStudyCard");
 const prevStudyCard = document.querySelector("#prevStudyCard");
 const nextStudyCard = document.querySelector("#nextStudyCard");
@@ -361,6 +362,156 @@ function getStudySides(card) {
   };
 }
 
+function findPhrasePart(english) {
+  const normalized = english.replace(/[?.]/g, "").toLowerCase();
+  const sortedAreas = [...workAreas].sort((a, b) => b.place.length - a.place.length);
+  const area = sortedAreas.find((item) => {
+    const place = item.place.replace(/^the /, "").toLowerCase();
+    const department = item.department.toLowerCase();
+    return normalized.includes(place) || normalized.includes(department);
+  });
+
+  if (area) {
+    return {
+      english: area.place,
+      japanese: area.jp,
+    };
+  }
+
+  const fallbackParts = [
+    ["the entrance", "入口"],
+    ["the register", "レジ"],
+    ["the loading area", "荷物搬入口"],
+    ["the stockroom", "在庫室"],
+    ["station three", "3番ステーション"],
+    ["the packing line", "梱包ライン"],
+    ["my supervisor", "上司"],
+    ["a trainer", "トレーナー"],
+    ["both hands", "両手"],
+    ["your step", "足元"],
+    ["more time", "もう少し時間"],
+    ["more supplies", "もっと備品"],
+    ["a new one", "新しいもの"],
+    ["the deadline", "締め切り"],
+    ["the box", "箱"],
+    ["the label", "ラベル"],
+    ["the order", "注文"],
+    ["an example", "例"],
+    ["my station", "私の作業場所"],
+    ["break", "休憩"],
+    ["gloves", "手袋"],
+    ["a helmet", "ヘルメット"],
+    ["a mask", "マスク"],
+    ["it", "それ"],
+    ["this", "これ"],
+    ["me", "私に / 私を"],
+    ["us", "私たちを"],
+  ];
+  const match = fallbackParts.find(([part]) => normalized.includes(part));
+  return match ? { english: match[0], japanese: match[1] } : null;
+}
+
+function buildWordMap(card) {
+  const english = card.english;
+  const part = findPhrasePart(english);
+  const rows = [];
+  const add = (chunk, meaning) => rows.push({ chunk, meaning });
+
+  if (english.startsWith("I'm working in ")) {
+    add("I'm", "私は");
+    add("working", "働いています");
+    add("in", "〜で / 〜の中で");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("I'm working by ")) {
+    add("I'm", "私は");
+    add("working", "働いています");
+    add("by", "〜のそばで");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("I'm working near ")) {
+    add("I'm", "私は");
+    add("working", "働いています");
+    add("near", "〜の近くで");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("I'm working at ")) {
+    add("I'm", "私は");
+    add("working", "働いています");
+    add("at", "〜で / 場所を指す");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("I'm working with ")) {
+    add("I'm", "私は");
+    add("working with", "〜と一緒に働いています");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("I work in ")) {
+    add("I", "私は");
+    add("work", "働きます / 勤務しています");
+    add("in", "〜で");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("Can you ")) {
+    add("Can you", "〜してくれますか");
+    add(english.replace(/^Can you /, "").replace(/[?.]/g, ""), "お願いする動作");
+  } else if (english.startsWith("Do I ")) {
+    add("Do I", "私は〜しますか");
+    add(english.replace(/^Do I /, "").replace(/[?.]/g, ""), "確認したい内容");
+  } else if (english.startsWith("Should I ")) {
+    add("Should I", "私は〜するべきですか");
+    add(english.replace(/^Should I /, "").replace(/[?.]/g, ""), "判断したい行動");
+  } else if (english.startsWith("Where ")) {
+    add("Where", "どこ");
+    add("should I / do I", "私は〜すればいいですか");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("Who ")) {
+    add("Who", "誰");
+    add("in charge / report to / ask", "担当 / 報告 / 聞く");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("Please ")) {
+    add("Please", "〜してください");
+    add(english.replace(/^Please /, "").replace(/[?.]/g, ""), "お願いする内容");
+  } else if (english.startsWith("I need ")) {
+    add("I", "私は");
+    add("need", "必要です");
+    if (part) add(part.english, part.japanese);
+  } else if (english.startsWith("I made ")) {
+    add("I", "私は");
+    add("made a mistake", "間違えました");
+  } else if (english.startsWith("I'll ")) {
+    add("I'll", "私は〜します");
+    add(english.replace(/^I'll /, "").replace(/[?.]/g, ""), "これからする行動");
+  } else if (english.startsWith("It's ")) {
+    add("It's", "それは / 状態は");
+    add(english.replace(/^It's /, "").replace(/[?.]/g, ""), "状態");
+  } else if (english.startsWith("This ")) {
+    add("This", "これは / この");
+    add(english.replace(/^This /, "").replace(/[?.]/g, ""), "状態や説明");
+  } else if (part) {
+    add(part.english, part.japanese);
+  }
+
+  if (!rows.length) {
+    add(english.replace(/[?.]/g, ""), card.japanese);
+  }
+
+  return rows.slice(0, 4);
+}
+
+function renderWordMap(card) {
+  const rows = buildWordMap(card);
+  wordMap.innerHTML = `
+    <p>単語マップ</p>
+    <div>
+      ${rows
+        .map(
+          (row) => `
+            <span class="word-chip">
+              <strong>${row.chunk}</strong>
+              <small>${row.meaning}</small>
+            </span>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
 function renderStudyCard() {
   const card = selectedDayCards[selectedStudyIndex];
   if (!card) return;
@@ -369,6 +520,7 @@ function renderStudyCard() {
   studyPrompt.textContent = sides.prompt;
   studyAnswer.textContent = sides.answer;
   studyCard.classList.remove("is-flipped");
+  renderWordMap(card);
 
   document.querySelectorAll("[data-front-lang]").forEach((button) => {
     button.classList.toggle("is-selected", button.dataset.frontLang === studyFrontLang);

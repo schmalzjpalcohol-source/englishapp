@@ -613,7 +613,50 @@ h3 {
   font-weight: 800;
 }
 
-.study-card.is-flipped #studyAnswer {
+.word-map {
+  display: none;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(217, 234, 219, 0.9);
+}
+
+.word-map p {
+  margin-bottom: 0.55rem;
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.word-map div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.word-chip {
+  display: grid;
+  gap: 0.15rem;
+  max-width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.word-chip strong {
+  color: var(--green-dark);
+  font-size: 0.9rem;
+}
+
+.word-chip small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.study-card.is-flipped #studyAnswer,
+.study-card.is-flipped .word-map {
   display: block;
 }
 
