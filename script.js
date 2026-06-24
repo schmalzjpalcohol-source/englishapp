@@ -208,6 +208,7 @@ const dailyCardList = document.querySelector("#dailyCardList");
 const quizCard = document.querySelector("#quizCard");
 const quizPrompt = document.querySelector("#quizPrompt");
 const quizAnswer = document.querySelector("#quizAnswer");
+const quizWordMap = document.querySelector("#quizWordMap");
 const speakQuiz = document.querySelector("#speakQuiz");
 const prevQuiz = document.querySelector("#prevQuiz");
 const nextQuiz = document.querySelector("#nextQuiz");
@@ -411,91 +412,156 @@ function findPhrasePart(english) {
   return match ? { english: match[0], japanese: match[1] } : null;
 }
 
+const wordNotes = {
+  a: ["1つの", "数えられる名詞の前に置きます。"],
+  again: ["もう一度", "同じことを繰り返してほしい時に使います。"],
+  am: ["〜です / 〜しています", "Iと一緒に使うbe動詞です。"],
+  an: ["1つの", "母音で始まる名詞の前に置きます。"],
+  are: ["〜です", "you / they などと一緒に使うbe動詞です。"],
+  ask: ["聞く / 頼む", "人に質問する時に使います。"],
+  at: ["〜で", "場所やポイントを指す時に使います。"],
+  back: ["戻って", "戻った状態を表します。"],
+  be: ["〜である", "状態を表す基本動詞です。"],
+  both: ["両方の", "2つをまとめて言う時に使います。"],
+  break: ["休憩", "仕事の休憩を言う時に使います。"],
+  bring: ["持ってくる", "相手の場所へ物を持って行く時に使います。"],
+  by: ["〜のそばで", "近い場所を言う時に使います。"],
+  can: ["〜できますか", "お願いや可能か確認する時に使います。"],
+  careful: ["気をつけて", "危ない時の注意でよく使います。"],
+  charge: ["担当", "in charge で担当者という意味になります。"],
+  check: ["確認する", "見て確かめる時に使います。"],
+  clock: ["打刻する", "clock in / out で出退勤打刻です。"],
+  come: ["来る", "こちらへ来てほしい時に使います。"],
+  damaged: ["壊れている", "物に問題がある時に使います。"],
+  deadline: ["締め切り", "いつまでか確認する時に使います。"],
+  do: ["する", "疑問文を作る助動詞としても使います。"],
+  down: ["下へ / 置いて", "put down で置くという意味になります。"],
+  example: ["例", "やり方を見せてほしい時に使います。"],
+  finished: ["終わった", "作業完了を伝える時に使います。"],
+  first: ["最初の", "順番や初日を言う時に使います。"],
+  follow: ["ついて行く", "人の後について行く時に使います。"],
+  from: ["〜から", "出発点や戻った場所を表します。"],
+  gloves: ["手袋", "安全確認でよく出ます。"],
+  go: ["行く", "どこへ行くか聞く時に使います。"],
+  going: ["行くところ", "be going to でこれからする行動を表します。"],
+  hand: ["手", "hands は両手や複数の手です。"],
+  hands: ["手", "both hands で両手です。"],
+  helmet: ["ヘルメット", "安全装備を確認する時に使います。"],
+  help: ["助ける / 手伝う", "困った時や依頼で使います。"],
+  here: ["ここ", "近い場所を指します。"],
+  heavy: ["重い", "持つ時に危ない場合に使います。"],
+  i: ["私は", "自分がすることを言う時の主語です。"],
+  in: ["〜で / 〜の中で", "部署・場所・期間を言う時に使います。"],
+  is: ["〜です", "単数のものや状態に使うbe動詞です。"],
+  it: ["それ", "前に出た物や状況を指します。"],
+  label: ["ラベル", "荷物や商品表示を言う時に使います。"],
+  leave: ["置いたままにする", "動かさないでと言う時に使います。"],
+  made: ["作った / してしまった", "made a mistake で間違えたです。"],
+  mask: ["マスク", "着用確認で使います。"],
+  me: ["私に / 私を", "相手の動作が自分に向く時に使います。"],
+  mistake: ["間違い", "ミスを伝える時に使います。"],
+  more: ["もっと / もう少し", "量や時間を追加したい時に使います。"],
+  my: ["私の", "自分の物や担当を言う時に使います。"],
+  near: ["〜の近くで", "少し近い場所を言う時に使います。"],
+  need: ["必要です", "必要な物や助けを言う時に使います。"],
+  new: ["新しい", "新しい物や初めてを言う時に使います。"],
+  not: ["〜ではない", "否定を作る時に使います。"],
+  now: ["今", "すぐ現在のことを言う時に使います。"],
+  on: ["〜の上 / 〜中", "on break で休憩中です。"],
+  one: ["もの / 1つ", "同じ種類の物を指す時に使います。"],
+  order: ["注文", "注文内容を言う時に使います。"],
+  out: ["外へ / 退勤", "clock out で退勤打刻です。"],
+  pick: ["拾う / 取る", "pick up で拾う・持ち上げるです。"],
+  please: ["お願いします", "依頼を丁寧にします。"],
+  problem: ["問題", "異常や困ったことを伝える時に使います。"],
+  put: ["置く", "物の場所を変える時に使います。"],
+  ready: ["準備できた", "始められるか確認する時に使います。"],
+  report: ["報告する", "誰に伝えるか確認する時に使います。"],
+  safe: ["安全な", "危なくないか確認する時に使います。"],
+  say: ["言う", "もう一度言ってほしい時に使います。"],
+  should: ["〜すべきですか", "正しい行動を確認する時に使います。"],
+  show: ["見せる", "例や場所を見せてほしい時に使います。"],
+  slowly: ["ゆっくり", "話すスピードを下げてほしい時に使います。"],
+  speak: ["話す", "話し方をお願いする時に使います。"],
+  step: ["足元 / 一歩", "Watch your step で足元注意です。"],
+  supplies: ["備品", "仕事で使う物をまとめて言います。"],
+  supervisor: ["上司", "報告先や確認先として使います。"],
+  take: ["取る / 連れて行く", "文によって意味が変わります。"],
+  tell: ["伝える / 教える", "情報を言ってもらう時に使います。"],
+  the: ["その", "特定の物や場所の前に置きます。"],
+  there: ["そこ", "少し離れた場所を指します。"],
+  this: ["これ / この", "近くの物や状況を指します。"],
+  time: ["時間", "必要な時間や期限で使います。"],
+  to: ["〜へ / 〜に", "方向や相手を表します。"],
+  too: ["〜すぎる", "too heavy で重すぎるです。"],
+  understand: ["理解する", "わかったかどうかを言う時に使います。"],
+  up: ["上へ", "pick up で拾う・持ち上げるです。"],
+  urgent: ["急ぎ", "優先度を確認する時に使います。"],
+  us: ["私たちを", "自分たちに向かう動作で使います。"],
+  use: ["使う", "道具や体の部分を使う時に使います。"],
+  wait: ["待つ", "少し止まってほしい時に使います。"],
+  watch: ["注意して見る", "危険に気をつけてと言う時に使います。"],
+  what: ["何", "内容や行動を聞く時に使います。"],
+  where: ["どこ", "場所を聞く時に使います。"],
+  who: ["誰", "人や担当者を聞く時に使います。"],
+  with: ["〜と一緒に", "人やチームと一緒にする時に使います。"],
+  work: ["働く", "所属や仕事を言う時に使います。"],
+  working: ["働いている", "今している仕事を表します。"],
+  wrong: ["違う", "内容が正しくない時に使います。"],
+  you: ["あなた / あなたが", "相手に質問や依頼をする時に使います。"],
+  your: ["あなたの", "相手の物や体の部分を指します。"],
+};
+
+function normalizeWord(word) {
+  return word.toLowerCase().replace(/[.,?!]/g, "");
+}
+
+function splitContraction(word) {
+  const normalized = normalizeWord(word);
+  if (normalized === "i'm") return ["I", "am"];
+  if (normalized === "it's") return ["It", "is"];
+  if (normalized === "i'll") return ["I", "will"];
+  if (normalized === "don't") return ["do", "not"];
+  return [word.replace(/[.,?!]/g, "")];
+}
+
 function buildWordMap(card) {
   const english = card.english;
   const part = findPhrasePart(english);
-  const rows = [];
-  const add = (chunk, meaning) => rows.push({ chunk, meaning });
+  const words = english.split(/\s+/).flatMap(splitContraction);
+  const rows = words
+    .map((word) => {
+      const key = normalizeWord(word);
+      const note = wordNotes[key];
+      if (!note) return null;
+      return {
+        chunk: word,
+        meaning: note[0],
+        note: note[1],
+      };
+    })
+    .filter(Boolean);
 
-  if (english.startsWith("I'm working in ")) {
-    add("I'm", "私は");
-    add("working", "働いています");
-    add("in", "〜で / 〜の中で");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("I'm working by ")) {
-    add("I'm", "私は");
-    add("working", "働いています");
-    add("by", "〜のそばで");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("I'm working near ")) {
-    add("I'm", "私は");
-    add("working", "働いています");
-    add("near", "〜の近くで");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("I'm working at ")) {
-    add("I'm", "私は");
-    add("working", "働いています");
-    add("at", "〜で / 場所を指す");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("I'm working with ")) {
-    add("I'm", "私は");
-    add("working with", "〜と一緒に働いています");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("I work in ")) {
-    add("I", "私は");
-    add("work", "働きます / 勤務しています");
-    add("in", "〜で");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("Can you ")) {
-    add("Can you", "〜してくれますか");
-    add(english.replace(/^Can you /, "").replace(/[?.]/g, ""), "お願いする動作");
-  } else if (english.startsWith("Do I ")) {
-    add("Do I", "私は〜しますか");
-    add(english.replace(/^Do I /, "").replace(/[?.]/g, ""), "確認したい内容");
-  } else if (english.startsWith("Should I ")) {
-    add("Should I", "私は〜するべきですか");
-    add(english.replace(/^Should I /, "").replace(/[?.]/g, ""), "判断したい行動");
-  } else if (english.startsWith("Where ")) {
-    add("Where", "どこ");
-    add("should I / do I", "私は〜すればいいですか");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("Who ")) {
-    add("Who", "誰");
-    add("in charge / report to / ask", "担当 / 報告 / 聞く");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("Please ")) {
-    add("Please", "〜してください");
-    add(english.replace(/^Please /, "").replace(/[?.]/g, ""), "お願いする内容");
-  } else if (english.startsWith("I need ")) {
-    add("I", "私は");
-    add("need", "必要です");
-    if (part) add(part.english, part.japanese);
-  } else if (english.startsWith("I made ")) {
-    add("I", "私は");
-    add("made a mistake", "間違えました");
-  } else if (english.startsWith("I'll ")) {
-    add("I'll", "私は〜します");
-    add(english.replace(/^I'll /, "").replace(/[?.]/g, ""), "これからする行動");
-  } else if (english.startsWith("It's ")) {
-    add("It's", "それは / 状態は");
-    add(english.replace(/^It's /, "").replace(/[?.]/g, ""), "状態");
-  } else if (english.startsWith("This ")) {
-    add("This", "これは / この");
-    add(english.replace(/^This /, "").replace(/[?.]/g, ""), "状態や説明");
-  } else if (part) {
-    add(part.english, part.japanese);
+  if (part) {
+    rows.push({
+      chunk: part.english,
+      meaning: part.japanese,
+      note: "部署名・場所名はそのまま固まりで覚えると使いやすいです。",
+    });
   }
 
-  if (!rows.length) {
-    add(english.replace(/[?.]/g, ""), card.japanese);
-  }
-
-  return rows.slice(0, 4);
+  const seen = new Set();
+  return rows.filter((row) => {
+    const key = row.chunk.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
-function renderWordMap(card) {
+function renderWordMap(card, target = wordMap) {
   const rows = buildWordMap(card);
-  wordMap.innerHTML = `
+  target.innerHTML = `
     <p>単語マップ</p>
     <div>
       ${rows
@@ -504,6 +570,7 @@ function renderWordMap(card) {
             <span class="word-chip">
               <strong>${row.chunk}</strong>
               <small>${row.meaning}</small>
+              <em>${row.note}</em>
             </span>
           `,
         )
@@ -560,6 +627,7 @@ function renderQuiz() {
   const [prompt, answer] = quizItems[quizIndex];
   quizPrompt.textContent = prompt;
   quizAnswer.textContent = answer;
+  renderWordMap({ english: answer, japanese: prompt }, quizWordMap);
   quizCard.classList.remove("is-flipped");
 }
 
