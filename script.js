@@ -417,9 +417,17 @@ function moveQuiz(direction) {
 }
 
 document.addEventListener("click", (event) => {
+  const frontButton = event.target.closest("[data-front-lang]");
+  if (frontButton) {
+    studyFrontLang = frontButton.dataset.frontLang;
+    renderStudyCard();
+    return;
+  }
+
   const speakButton = event.target.closest("[data-speak]");
   if (speakButton) {
     speak(speakButton.dataset.speak);
+    return;
   }
 
   const departmentButton = event.target.closest("[data-department]");
@@ -448,11 +456,6 @@ document.addEventListener("click", (event) => {
     renderStudyCard();
   }
 
-  const frontButton = event.target.closest("[data-front-lang]");
-  if (frontButton) {
-    studyFrontLang = frontButton.dataset.frontLang;
-    renderStudyCard();
-  }
 });
 
 quizCard.addEventListener("click", () => {

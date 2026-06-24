@@ -513,29 +513,48 @@ h3 {
 .front-toggle {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.35rem;
+  gap: 0.5rem;
   margin-bottom: 0.9rem;
-  padding: 0.35rem;
-  background: var(--soft);
-  border: 1px solid var(--line);
-  border-radius: 0.75rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
 }
 
 .front-toggle button {
-  min-height: 2.4rem;
-  border: 0;
-  border-radius: 0.55rem;
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
   color: var(--green-dark);
-  background: transparent;
+  background: var(--white);
   cursor: pointer;
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   font-weight: 800;
+}
+
+.front-toggle button span {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.5rem;
+  background: var(--soft);
+  font-size: 0.76rem;
 }
 
 .front-toggle button.is-selected {
   color: var(--white);
   background: var(--green-dark);
+  border-color: var(--green-dark);
   box-shadow: 0 8px 18px rgba(14, 100, 66, 0.18);
+}
+
+.front-toggle button.is-selected span {
+  color: var(--green-dark);
+  background: var(--mint);
 }
 
 .study-card {
@@ -552,11 +571,33 @@ h3 {
   cursor: pointer;
 }
 
-.study-card p:first-child {
+.card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-topline p {
+  margin: 0;
   color: var(--green);
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.tap-hint {
+  display: inline-grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--green-dark);
+  font-size: 1.25rem;
+  box-shadow: 0 8px 20px rgba(20, 51, 38, 0.08);
 }
 
 .study-card h4 {
@@ -784,9 +825,24 @@ h3 {
 }
 
 .quiz-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   color: var(--green);
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.quiz-kicker span {
+  display: inline-grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  color: var(--green-dark);
+  font-size: 1.25rem;
 }
 
 .quiz-card h3 {

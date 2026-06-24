@@ -180,11 +180,20 @@
               <span id="dayMixBadge">2 new</span>
             </div>
             <div class="front-toggle" aria-label="カードの表面">
-              <button class="is-selected" data-front-lang="en">English front</button>
-              <button data-front-lang="ja">日本語 front</button>
+              <button class="is-selected" data-front-lang="en" type="button">
+                <span>EN</span>
+                English
+              </button>
+              <button data-front-lang="ja" type="button">
+                <span>JP</span>
+                日本語
+              </button>
             </div>
             <div class="study-card" id="studyCard" tabindex="0" role="button">
-              <p id="studyCardType">New card</p>
+              <div class="card-topline">
+                <p id="studyCardType">New card</p>
+                <span class="tap-hint" aria-hidden="true">☝</span>
+              </div>
               <h4 id="studyPrompt">Be careful.</h4>
               <p id="studyAnswer">気をつけて。</p>
             </div>
@@ -217,7 +226,7 @@
 
         <div class="quiz-shell">
           <div class="quiz-card" id="quizCard" tabindex="0" role="button" aria-live="polite">
-            <p class="quiz-kicker">Tap to flip</p>
+            <p class="quiz-kicker"><span aria-hidden="true">☝</span> Tap</p>
             <h3 id="quizPrompt">気をつけて。</h3>
             <p id="quizAnswer">Be careful.</p>
           </div>
