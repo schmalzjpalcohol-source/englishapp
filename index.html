@@ -20,6 +20,7 @@
       </a>
       <nav class="nav" aria-label="メインナビゲーション">
         <a href="#steps">ステップ</a>
+        <a href="#builder">文を作る</a>
         <a href="#work">職場フレーズ</a>
         <a href="#practice">練習</a>
       </nav>
@@ -60,7 +61,7 @@
           <span>基本ステップ</span>
         </div>
         <div>
-          <strong>24</strong>
+          <strong>50+</strong>
           <span>重要フレーズ</span>
         </div>
         <div>
@@ -115,6 +116,35 @@
               <li><button data-speak="Put them here.">Put them here.</button><span>それらをここに置いてください。</span></li>
             </ul>
           </article>
+        </div>
+      </section>
+
+      <section class="section builder-section" id="builder">
+        <div class="section-heading">
+          <p class="eyebrow">Sentence builder</p>
+          <h2>自分の仕事を英語で言う</h2>
+          <p>
+            ボタンを選ぶだけで、部署・場所・担当を入れ替えられます。完成した文はそのまま声に出して練習できます。
+          </p>
+        </div>
+
+        <div class="builder-layout">
+          <div class="builder-card">
+            <p class="builder-label">今の文</p>
+            <h3 id="builtSentence">I'm working in the kitchen department.</h3>
+            <p id="builtJapanese">私はキッチン部門で働いています。</p>
+            <button class="primary-action" id="speakBuiltSentence">聞く</button>
+          </div>
+          <div class="builder-options" aria-label="文のオプション">
+            <div>
+              <p class="option-title">場所 / 部署</p>
+              <div class="option-row" id="departmentOptions"></div>
+            </div>
+            <div>
+              <p class="option-title">言い方</p>
+              <div class="pattern-grid" id="patternOptions"></div>
+            </div>
+          </div>
         </div>
       </section>
 

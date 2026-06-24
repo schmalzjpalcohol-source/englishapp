@@ -156,6 +156,10 @@ h3 {
   margin-top: 1.65rem;
 }
 
+.builder-card .primary-action {
+  margin-top: 1rem;
+}
+
 .primary-action,
 .secondary-action,
 .icon-action {
@@ -355,6 +359,107 @@ h3 {
   background: linear-gradient(180deg, rgba(238, 248, 239, 0.65), rgba(255, 255, 255, 0));
 }
 
+.builder-section {
+  background:
+    linear-gradient(135deg, rgba(14, 100, 66, 0.08), rgba(244, 211, 94, 0.14)),
+    rgba(255, 255, 255, 0.35);
+}
+
+.builder-layout {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.builder-card,
+.builder-options {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  box-shadow: 0 12px 34px rgba(20, 51, 38, 0.08);
+}
+
+.builder-card {
+  position: sticky;
+  top: 6rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.builder-label,
+.option-title {
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.builder-card h3 {
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+}
+
+.builder-card p:last-of-type {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.builder-options {
+  display: grid;
+  gap: 1.4rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+}
+
+.option-row,
+.pattern-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.choice-button,
+.pattern-button {
+  min-height: 2.8rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  color: var(--green-dark);
+  background: var(--white);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.choice-button {
+  padding: 0.65rem 0.85rem;
+}
+
+.pattern-button {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.85rem;
+  text-align: left;
+}
+
+.pattern-button span {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.choice-button.is-selected,
+.pattern-button.is-selected {
+  color: var(--white);
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
+
+.pattern-button.is-selected span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
 .phrase-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -451,7 +556,8 @@ h3 {
 
 @media (max-width: 980px) {
   .hero,
-  .practice-section {
+  .practice-section,
+  .builder-layout {
     grid-template-columns: 1fr;
   }
 
@@ -469,6 +575,10 @@ h3 {
   }
 
   .quiz-shell {
+    position: static;
+  }
+
+  .builder-card {
     position: static;
   }
 }
@@ -501,6 +611,10 @@ h3 {
 
   .phrase-card {
     grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .pattern-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer {
