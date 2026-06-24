@@ -510,6 +510,34 @@ h3 {
   font-weight: 800;
 }
 
+.front-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+  padding: 0.35rem;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.front-toggle button {
+  min-height: 2.4rem;
+  border: 0;
+  border-radius: 0.55rem;
+  color: var(--green-dark);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.front-toggle button.is-selected {
+  color: var(--white);
+  background: var(--green-dark);
+  box-shadow: 0 8px 18px rgba(14, 100, 66, 0.18);
+}
+
 .study-card {
   min-height: 16rem;
   display: flex;

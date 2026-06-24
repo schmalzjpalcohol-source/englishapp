@@ -23,14 +23,14 @@ const phrases = [
   ["It's too heavy.", "重すぎます。", "safety"],
   ["Use both hands.", "両手を使って。", "safety"],
   ["Take a break.", "休憩してください。", "care"],
-  ["I'm working in the kitchen department.", "私はキッチン部門で働いています。", "department"],
-  ["I'm working in the warehouse department.", "私は倉庫部門で働いています。", "department"],
-  ["I'm working in the service department.", "私はサービス部門で働いています。", "department"],
-  ["I'm working at the front desk.", "私はフロントで働いています。", "place"],
+  ["I'm working in the Vacuum Automation Sales Division.", "私はVA オートメーション営業部で働いています。", "department"],
+  ["I'm working in the Handling Systems Sales Division.", "私はHS 手動搬送システム営業部で働いています。", "department"],
+  ["I'm working in the Operations Division.", "私はオペレーション部で働いています。", "department"],
+  ["I'm working in the Marketing Division.", "私はマーケティング部で働いています。", "department"],
   ["I'm working on the morning shift.", "私は朝番で働いています。", "shift"],
-  ["I'm working with the cleaning team.", "私は清掃チームと働いています。", "team"],
-  ["I work in quality control.", "私は品質管理で働いています。", "department"],
-  ["I work in customer service.", "私はカスタマーサービスで働いています。", "department"],
+  ["I'm working with the Field Service team.", "私はフィールドサービスチームと働いています。", "team"],
+  ["I work in QA.", "私は品質保証で働いています。", "department"],
+  ["I work in Material Logistics.", "私は在庫管理で働いています。", "department"],
   ["I'm new here.", "ここは初めてです。", "intro"],
   ["This is my first day.", "今日は初日です。", "intro"],
   ["Who should I ask?", "誰に聞けばいいですか。", "question"],
@@ -81,29 +81,36 @@ const phrases = [
 ];
 
 const workAreas = [
-  { department: "kitchen", place: "the kitchen", jp: "キッチン" },
-  { department: "warehouse", place: "the warehouse", jp: "倉庫" },
-  { department: "cleaning", place: "the cleaning area", jp: "清掃エリア" },
-  { department: "service", place: "the service area", jp: "サービスエリア" },
-  { department: "front desk", place: "the front desk", jp: "フロント" },
-  { department: "quality control", place: "quality control", jp: "品質管理" },
-  { department: "customer service", place: "customer service", jp: "カスタマーサービス" },
-  { department: "packing", place: "the packing line", jp: "梱包ライン" },
-  { department: "receiving", place: "the receiving area", jp: "受け取りエリア" },
-  { department: "shipping", place: "the shipping area", jp: "出荷エリア" },
-  { department: "stockroom", place: "the stockroom", jp: "在庫室" },
-  { department: "register", place: "the register", jp: "レジ" },
-  { department: "entrance", place: "the entrance", jp: "入口" },
-  { department: "loading area", place: "the loading area", jp: "荷物搬入口" },
+  { department: "Vacuum Automation Sales Division", place: "the Vacuum Automation Sales Division", jp: "VA オートメーション営業部", short: "VA Sales" },
+  { department: "Handling Systems Sales Division", place: "the Handling Systems Sales Division", jp: "HS 手動搬送システム営業部", short: "HS Sales" },
+  { department: "Operations Division", place: "the Operations Division", jp: "オペレーション部", short: "Operations" },
+  { department: "Marketing Division", place: "the Marketing Division", jp: "マーケティング部", short: "Marketing" },
+  { department: "Finance Division", place: "the Finance Division", jp: "経理部", short: "Finance" },
+  { department: "GA/HR", place: "GA/HR", jp: "総務人事", short: "GA/HR" },
+  { department: "Marketing and Communications", place: "Marketing and Communications", jp: "マーケティング＆コミュニケーション", short: "M&C" },
+  { department: "Business Development", place: "Business Development", jp: "ビジネスディベロップメント", short: "Biz Dev" },
+  { department: "Web Shop and Marketing Data Analysis", place: "Web Shop and Marketing Data Analysis", jp: "ウェブショップ＆マーケティングデータアナリシス", short: "Web/Data" },
+  { department: "QA", place: "QA", jp: "品質保証", short: "QA" },
+  { department: "Material Logistics", place: "Material Logistics", jp: "在庫管理", short: "Logistics" },
+  { department: "IT", place: "IT", jp: "情報技術管理", short: "IT" },
+  { department: "Field Service", place: "Field Service", jp: "フィールドサービス", short: "Field Service" },
+  { department: "Order Processing", place: "Order Processing", jp: "受注管理", short: "Orders" },
+  { department: "PROC and QC", place: "PROC and QC", jp: "調達＆品質管理", short: "PROC/QC" },
+  { department: "HS Inside Sales", place: "HS Inside Sales", jp: "HS インサイドセールス", short: "HS Inside" },
+  { department: "HS Outside Sales", place: "HS Outside Sales", jp: "HS アウトサイドセールス", short: "HS Outside" },
+  { department: "VA Inside Sales", place: "VA Inside Sales", jp: "VA インサイドセールス", short: "VA Inside" },
+  { department: "VA Outside Sales, West Japan Area", place: "VA Outside Sales, West Japan Area", jp: "VA アウトサイドセールス 西日本エリア", short: "VA West" },
+  { department: "VA Outside Sales, Central Japan Area", place: "VA Outside Sales, Central Japan Area", jp: "VA アウトサイドセールス 中日本エリア", short: "VA Central" },
+  { department: "VA Outside Sales, East Japan Area", place: "VA Outside Sales, East Japan Area", jp: "VA アウトサイドセールス 東日本エリア", short: "VA East" },
 ];
 
 const patterns = [
   {
-    label: "I'm working in the ... department.",
-    help: "私は...部門で働いています。",
+    label: "I'm working in ...",
+    help: "私は...で働いています。",
     build: (area) => [
-      `I'm working in the ${area.department} department.`,
-      `私は${area.jp}部門で働いています。`,
+      `I'm working in ${area.place}.`,
+      `私は${area.jp}で働いています。`,
     ],
   },
   {
@@ -210,6 +217,7 @@ let selectedPattern = 0;
 let selectedDayIndex = 1;
 let selectedStudyIndex = 0;
 let selectedDayCards = [];
+let studyFrontLang = "en";
 
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
@@ -242,7 +250,7 @@ function renderBuilderOptions() {
     .map(
       (area, index) => `
         <button class="choice-button ${index === selectedArea ? "is-selected" : ""}" data-department="${index}">
-          ${area.place}<br />
+          ${area.short}<br />
           <span>${area.jp}</span>
         </button>
       `,
@@ -273,12 +281,8 @@ function addDays(date, amount) {
   return next;
 }
 
-function formatMonthTitle(date) {
-  return new Intl.DateTimeFormat("ja-JP", { month: "long", year: "numeric" }).format(date);
-}
-
-function formatDayTitle(date) {
-  return new Intl.DateTimeFormat("ja-JP", { month: "long", day: "numeric", weekday: "short" }).format(date);
+function formatDayTitle(dayIndex) {
+  return dayIndex <= 30 ? `Block 1 - Day ${dayIndex}` : `Block 2 - Day ${dayIndex - 30}`;
 }
 
 function getNewCardIdsForDay(dayIndex) {
@@ -310,60 +314,72 @@ function getDayPlan(dayIndex) {
 }
 
 function renderCalendar() {
-  const now = new Date();
-  const firstMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const secondMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const todayKey = now.toDateString();
-  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
-
-  calendarMonths.innerHTML = [firstMonth, secondMonth]
-    .map((monthDate) => {
-      const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
-      const offset = monthDate.getDay();
-      const blanks = Array.from({ length: offset }, () => '<span class="blank-day"></span>').join("");
-      const days = Array.from({ length: daysInMonth }, (_, day) => {
-        const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), day + 1);
-        const dayIndex = Math.floor((date - firstMonth) / 86400000) + 1;
+  calendarMonths.innerHTML = [
+    { title: "Days 1-30", start: 1 },
+    { title: "Days 31-60", start: 31 },
+  ]
+    .map((block) => {
+      const days = Array.from({ length: 30 }, (_, day) => {
+        const dayIndex = block.start + day;
         const plan = getDayPlan(dayIndex);
-        const isToday = date.toDateString() === todayKey;
         const isSelected = dayIndex === selectedDayIndex;
 
         return `
           <button
-            class="day-button ${isToday ? "is-today" : ""} ${isSelected ? "is-selected" : ""}"
+            class="day-button ${isSelected ? "is-selected" : ""}"
             data-calendar-day="${dayIndex}"
-            aria-label="${formatDayTitle(date)}: ${plan.length} cards"
+            aria-label="${formatDayTitle(dayIndex)}: ${plan.length} cards"
           >
-            ${day + 1}
+            ${dayIndex}
           </button>
         `;
       }).join("");
 
       return `
         <section class="month">
-          <p class="month-title">${formatMonthTitle(monthDate)}</p>
-          <div class="weekday-row">${weekdays.map((day) => `<span>${day}</span>`).join("")}</div>
-          <div class="day-grid">${blanks}${days}</div>
+          <p class="month-title">${block.title}</p>
+          <div class="day-grid fixed-days">${days}</div>
         </section>
       `;
     })
     .join("");
 }
 
+function getStudySides(card) {
+  if (studyFrontLang === "ja") {
+    return {
+      prompt: card.japanese,
+      answer: card.english,
+      promptLang: "Japanese front",
+    };
+  }
+
+  return {
+    prompt: card.english,
+    answer: card.japanese,
+    promptLang: "English front",
+  };
+}
+
 function renderStudyCard() {
   const card = selectedDayCards[selectedStudyIndex];
   if (!card) return;
-  studyCardType.textContent = card.kind === "new" ? "New card" : `Review after ${card.interval}d`;
-  studyPrompt.textContent = card.english;
-  studyAnswer.textContent = card.japanese;
+  const sides = getStudySides(card);
+  studyCardType.textContent = `${card.kind === "new" ? "New card" : `Review after ${card.interval}d`} / ${sides.promptLang}`;
+  studyPrompt.textContent = sides.prompt;
+  studyAnswer.textContent = sides.answer;
   studyCard.classList.remove("is-flipped");
+
+  document.querySelectorAll("[data-front-lang]").forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.frontLang === studyFrontLang);
+  });
 
   dailyCardList.innerHTML = selectedDayCards
     .map(
       (item, index) => `
         <button class="${index === selectedStudyIndex ? "is-selected" : ""}" data-study-card="${index}">
           <span class="card-kind">${item.kind === "new" ? "new" : "review"}</span>
-          <span>${item.english}</span>
+          <span>${studyFrontLang === "ja" ? item.japanese : item.english}</span>
         </button>
       `,
     )
@@ -371,15 +387,13 @@ function renderStudyCard() {
 }
 
 function renderSelectedDay() {
-  const firstMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  const selectedDate = addDays(firstMonth, selectedDayIndex - 1);
   selectedDayCards = getDayPlan(selectedDayIndex);
   selectedStudyIndex = 0;
 
   const newCount = selectedDayCards.filter((card) => card.kind === "new").length;
   const reviewCount = selectedDayCards.length - newCount;
   selectedDayLabel.textContent = `Day ${selectedDayIndex}`;
-  selectedDayTitle.textContent = formatDayTitle(selectedDate);
+  selectedDayTitle.textContent = formatDayTitle(selectedDayIndex);
   dayMixBadge.textContent = `${newCount} new / ${reviewCount} review`;
   renderStudyCard();
   renderCalendar();
@@ -431,6 +445,12 @@ document.addEventListener("click", (event) => {
   const listedStudyCard = event.target.closest("[data-study-card]");
   if (listedStudyCard) {
     selectedStudyIndex = Number(listedStudyCard.dataset.studyCard);
+    renderStudyCard();
+  }
+
+  const frontButton = event.target.closest("[data-front-lang]");
+  if (frontButton) {
+    studyFrontLang = frontButton.dataset.frontLang;
     renderStudyCard();
   }
 });
