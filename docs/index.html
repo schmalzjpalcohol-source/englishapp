@@ -21,6 +21,7 @@
       <nav class="nav" aria-label="メインナビゲーション">
         <a href="#steps">ステップ</a>
         <a href="#builder">文を作る</a>
+        <a href="#calendar">カレンダー</a>
         <a href="#work">職場フレーズ</a>
         <a href="#practice">練習</a>
       </nav>
@@ -33,7 +34,7 @@
           <h1>英語を、仕事で使える順番で。</h1>
           <p class="lead">
             I / you / me / them から、現場で聞こえる短い指示まで。
-            1日5分で見て、声に出して、少しずつ覚えるためのミニアプリです。
+            ねこのカレンダーで、毎日少しずつ覚えるためのミニアプリです。
           </p>
           <div class="hero-actions">
             <a class="primary-action" href="#steps">はじめる</a>
@@ -41,6 +42,7 @@
           </div>
         </div>
         <div class="hero-panel" aria-label="今日のミニレッスン">
+          <img class="cat-mascot" src="assets/study-cat.png" alt="英語を勉強するねこのマスコット" />
           <div class="panel-topline">
             <span>Today</span>
             <strong>8 min</strong>
@@ -65,8 +67,8 @@
           <span>重要フレーズ</span>
         </div>
         <div>
-          <strong>5分</strong>
-          <span>毎日の練習</span>
+          <strong>2ヶ月</strong>
+          <span>復習カレンダー</span>
         </div>
       </section>
 
@@ -145,6 +147,50 @@
               <div class="pattern-grid" id="patternOptions"></div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="section calendar-section" id="calendar">
+        <div class="section-heading">
+          <p class="eyebrow">Cat review calendar</p>
+          <h2>2ヶ月のねこ復習カレンダー</h2>
+          <p>
+            最初の日は2枚、その後は新しいカード1枚と古いカードの復習。1日、2日、4日、8日、16日後にまた出てきます。
+          </p>
+        </div>
+
+        <div class="calendar-layout">
+          <div class="calendar-board">
+            <div class="calendar-header">
+              <div>
+                <p class="builder-label">Study map</p>
+                <h3>今日の足あとを選ぶ</h3>
+              </div>
+              <img src="assets/study-cat.png" alt="" aria-hidden="true" />
+            </div>
+            <div class="months" id="calendarMonths"></div>
+          </div>
+
+          <aside class="day-study" aria-live="polite">
+            <div class="day-study-top">
+              <div>
+                <p class="builder-label" id="selectedDayLabel">Day 1</p>
+                <h3 id="selectedDayTitle">今日のカード</h3>
+              </div>
+              <span id="dayMixBadge">2 new</span>
+            </div>
+            <div class="study-card" id="studyCard" tabindex="0" role="button">
+              <p id="studyCardType">New card</p>
+              <h4 id="studyPrompt">Be careful.</h4>
+              <p id="studyAnswer">気をつけて。</p>
+            </div>
+            <div class="study-controls">
+              <button class="icon-action" id="prevStudyCard" aria-label="前のカード">←</button>
+              <button class="primary-action" id="speakStudyCard">聞く</button>
+              <button class="icon-action" id="nextStudyCard" aria-label="次のカード">→</button>
+            </div>
+            <div class="daily-card-list" id="dailyCardList"></div>
+          </aside>
         </div>
       </section>
 

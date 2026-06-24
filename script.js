@@ -171,12 +171,32 @@ const quizItems = [
   ["箱が壊れています。", "The box is damaged."],
 ];
 
+const reviewIntervals = [1, 2, 4, 8, 16];
+const calendarCards = phrases.slice(0, 56).map(([english, japanese, tag], index) => ({
+  id: index,
+  english,
+  japanese,
+  tag,
+}));
+
 const phraseList = document.querySelector("#phraseList");
 const departmentOptions = document.querySelector("#departmentOptions");
 const patternOptions = document.querySelector("#patternOptions");
 const builtSentence = document.querySelector("#builtSentence");
 const builtJapanese = document.querySelector("#builtJapanese");
 const speakBuiltSentence = document.querySelector("#speakBuiltSentence");
+const calendarMonths = document.querySelector("#calendarMonths");
+const selectedDayLabel = document.querySelector("#selectedDayLabel");
+const selectedDayTitle = document.querySelector("#selectedDayTitle");
+const dayMixBadge = document.querySelector("#dayMixBadge");
+const studyCard = document.querySelector("#studyCard");
+const studyCardType = document.querySelector("#studyCardType");
+const studyPrompt = document.querySelector("#studyPrompt");
+const studyAnswer = document.querySelector("#studyAnswer");
+const speakStudyCard = document.querySelector("#speakStudyCard");
+const prevStudyCard = document.querySelector("#prevStudyCard");
+const nextStudyCard = document.querySelector("#nextStudyCard");
+const dailyCardList = document.querySelector("#dailyCardList");
 const quizCard = document.querySelector("#quizCard");
 const quizPrompt = document.querySelector("#quizPrompt");
 const quizAnswer = document.querySelector("#quizAnswer");
@@ -187,6 +207,9 @@ const nextQuiz = document.querySelector("#nextQuiz");
 let quizIndex = 0;
 let selectedArea = 0;
 let selectedPattern = 0;
+let selectedDayIndex = 1;
+let selectedStudyIndex = 0;
+let selectedDayCards = [];
 
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
@@ -244,6 +267,129 @@ function renderBuiltSentence() {
   builtJapanese.textContent = japanese;
 }
 
+function addDays(date, amount) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + amount);
+  return next;
+}
+
+function formatMonthTitle(date) {
+  return new Intl.DateTimeFormat("ja-JP", { month: "long", year: "numeric" }).format(date);
+}
+
+function formatDayTitle(date) {
+  return new Intl.DateTimeFormat("ja-JP", { month: "long", day: "numeric", weekday: "short" }).format(date);
+}
+
+function getNewCardIdsForDay(dayIndex) {
+  if (dayIndex === 1) return [0, 1];
+  const cardId = dayIndex;
+  return cardId < calendarCards.length ? [cardId] : [];
+}
+
+function getCardsLearnedOnDay(dayIndex) {
+  if (dayIndex < 1) return [];
+  return getNewCardIdsForDay(dayIndex)
+    .map((id) => calendarCards[id])
+    .filter(Boolean);
+}
+
+function getDayPlan(dayIndex) {
+  const newCards = getCardsLearnedOnDay(dayIndex).map((card) => ({ ...card, kind: "new" }));
+  const reviewCards = reviewIntervals
+    .flatMap((interval) =>
+      getCardsLearnedOnDay(dayIndex - interval).map((card) => ({
+        ...card,
+        kind: "review",
+        interval,
+      })),
+    )
+    .filter((card, position, all) => all.findIndex((item) => item.id === card.id) === position);
+
+  return [...newCards, ...reviewCards];
+}
+
+function renderCalendar() {
+  const now = new Date();
+  const firstMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const secondMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const todayKey = now.toDateString();
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+
+  calendarMonths.innerHTML = [firstMonth, secondMonth]
+    .map((monthDate) => {
+      const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+      const offset = monthDate.getDay();
+      const blanks = Array.from({ length: offset }, () => '<span class="blank-day"></span>').join("");
+      const days = Array.from({ length: daysInMonth }, (_, day) => {
+        const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), day + 1);
+        const dayIndex = Math.floor((date - firstMonth) / 86400000) + 1;
+        const plan = getDayPlan(dayIndex);
+        const isToday = date.toDateString() === todayKey;
+        const isSelected = dayIndex === selectedDayIndex;
+
+        return `
+          <button
+            class="day-button ${isToday ? "is-today" : ""} ${isSelected ? "is-selected" : ""}"
+            data-calendar-day="${dayIndex}"
+            aria-label="${formatDayTitle(date)}: ${plan.length} cards"
+          >
+            ${day + 1}
+          </button>
+        `;
+      }).join("");
+
+      return `
+        <section class="month">
+          <p class="month-title">${formatMonthTitle(monthDate)}</p>
+          <div class="weekday-row">${weekdays.map((day) => `<span>${day}</span>`).join("")}</div>
+          <div class="day-grid">${blanks}${days}</div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
+function renderStudyCard() {
+  const card = selectedDayCards[selectedStudyIndex];
+  if (!card) return;
+  studyCardType.textContent = card.kind === "new" ? "New card" : `Review after ${card.interval}d`;
+  studyPrompt.textContent = card.english;
+  studyAnswer.textContent = card.japanese;
+  studyCard.classList.remove("is-flipped");
+
+  dailyCardList.innerHTML = selectedDayCards
+    .map(
+      (item, index) => `
+        <button class="${index === selectedStudyIndex ? "is-selected" : ""}" data-study-card="${index}">
+          <span class="card-kind">${item.kind === "new" ? "new" : "review"}</span>
+          <span>${item.english}</span>
+        </button>
+      `,
+    )
+    .join("");
+}
+
+function renderSelectedDay() {
+  const firstMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const selectedDate = addDays(firstMonth, selectedDayIndex - 1);
+  selectedDayCards = getDayPlan(selectedDayIndex);
+  selectedStudyIndex = 0;
+
+  const newCount = selectedDayCards.filter((card) => card.kind === "new").length;
+  const reviewCount = selectedDayCards.length - newCount;
+  selectedDayLabel.textContent = `Day ${selectedDayIndex}`;
+  selectedDayTitle.textContent = formatDayTitle(selectedDate);
+  dayMixBadge.textContent = `${newCount} new / ${reviewCount} review`;
+  renderStudyCard();
+  renderCalendar();
+}
+
+function moveStudyCard(direction) {
+  selectedStudyIndex = (selectedStudyIndex + direction + selectedDayCards.length) % selectedDayCards.length;
+  renderStudyCard();
+}
+
 function renderQuiz() {
   const [prompt, answer] = quizItems[quizIndex];
   quizPrompt.textContent = prompt;
@@ -275,10 +421,33 @@ document.addEventListener("click", (event) => {
     renderBuilderOptions();
     renderBuiltSentence();
   }
+
+  const calendarDayButton = event.target.closest("[data-calendar-day]");
+  if (calendarDayButton) {
+    selectedDayIndex = Number(calendarDayButton.dataset.calendarDay);
+    renderSelectedDay();
+  }
+
+  const listedStudyCard = event.target.closest("[data-study-card]");
+  if (listedStudyCard) {
+    selectedStudyIndex = Number(listedStudyCard.dataset.studyCard);
+    renderStudyCard();
+  }
 });
 
 quizCard.addEventListener("click", () => {
   quizCard.classList.toggle("is-flipped");
+});
+
+studyCard.addEventListener("click", () => {
+  studyCard.classList.toggle("is-flipped");
+});
+
+studyCard.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    studyCard.classList.toggle("is-flipped");
+  }
 });
 
 quizCard.addEventListener("keydown", (event) => {
@@ -290,10 +459,14 @@ quizCard.addEventListener("keydown", (event) => {
 
 speakQuiz.addEventListener("click", () => speak(quizItems[quizIndex][1]));
 speakBuiltSentence.addEventListener("click", () => speak(builtSentence.textContent));
+speakStudyCard.addEventListener("click", () => speak(selectedDayCards[selectedStudyIndex].english));
+prevStudyCard.addEventListener("click", () => moveStudyCard(-1));
+nextStudyCard.addEventListener("click", () => moveStudyCard(1));
 prevQuiz.addEventListener("click", () => moveQuiz(-1));
 nextQuiz.addEventListener("click", () => moveQuiz(1));
 
 renderPhrases();
 renderBuilderOptions();
 renderBuiltSentence();
+renderSelectedDay();
 renderQuiz();

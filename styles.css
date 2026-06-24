@@ -196,6 +196,7 @@ h3 {
 }
 
 .hero-panel {
+  position: relative;
   align-self: stretch;
   display: flex;
   min-height: 28rem;
@@ -210,6 +211,18 @@ h3 {
   box-shadow: var(--shadow);
   color: var(--white);
   overflow: hidden;
+}
+
+.cat-mascot {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: min(42%, 13rem);
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 14px 34px rgba(20, 51, 38, 0.18);
 }
 
 .panel-topline {
@@ -357,6 +370,228 @@ h3 {
 
 .phrase-section {
   background: linear-gradient(180deg, rgba(238, 248, 239, 0.65), rgba(255, 255, 255, 0));
+}
+
+.calendar-section {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(191, 232, 197, 0.28)),
+    var(--paper);
+}
+
+.calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(20rem, 0.82fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.calendar-board,
+.day-study {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  box-shadow: 0 12px 34px rgba(20, 51, 38, 0.08);
+}
+
+.calendar-board {
+  padding: clamp(1rem, 3vw, 1.4rem);
+}
+
+.calendar-header,
+.day-study-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-header h3,
+.day-study-top h3 {
+  margin-bottom: 0;
+}
+
+.calendar-header img {
+  width: 5.2rem;
+  height: 5.2rem;
+  object-fit: contain;
+  border-radius: 0.8rem;
+  background: var(--soft);
+}
+
+.months {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.month {
+  min-width: 0;
+}
+
+.month-title {
+  margin-bottom: 0.65rem;
+  color: var(--green-dark);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.weekday-row,
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.weekday-row {
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.day-button,
+.blank-day {
+  aspect-ratio: 1;
+  min-width: 0;
+}
+
+.day-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.day-button::after {
+  position: absolute;
+  right: 0.22rem;
+  bottom: 0.12rem;
+  color: var(--green);
+  content: "•";
+  font-size: 1.05rem;
+}
+
+.day-button.is-today {
+  border-color: var(--yellow);
+  box-shadow: inset 0 0 0 2px rgba(244, 211, 94, 0.72);
+}
+
+.day-button.is-selected {
+  color: var(--white);
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
+
+.day-button.is-selected::after {
+  color: var(--yellow);
+}
+
+.day-study {
+  position: sticky;
+  top: 6rem;
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+.day-study-top span {
+  flex: 0 0 auto;
+  padding: 0.42rem 0.65rem;
+  color: var(--green-dark);
+  background: var(--soft);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.study-card {
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  background:
+    linear-gradient(135deg, rgba(191, 232, 197, 0.58), rgba(255, 255, 255, 0.9)),
+    var(--white);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  cursor: pointer;
+}
+
+.study-card p:first-child {
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.study-card h4 {
+  margin: 0 0 0.9rem;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  line-height: 1.12;
+}
+
+#studyAnswer {
+  display: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.study-card.is-flipped #studyAnswer {
+  display: block;
+}
+
+.study-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.9rem;
+}
+
+.daily-card-list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.daily-card-list button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: center;
+  width: 100%;
+  min-height: 3.2rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  text-align: left;
+}
+
+.daily-card-list button.is-selected {
+  border-color: var(--green-dark);
+  background: var(--soft);
+}
+
+.card-kind {
+  display: inline-flex;
+  min-width: 4.4rem;
+  justify-content: center;
+  padding: 0.24rem 0.45rem;
+  color: var(--green-dark);
+  background: var(--mint);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
 }
 
 .builder-section {
@@ -557,7 +792,8 @@ h3 {
 @media (max-width: 980px) {
   .hero,
   .practice-section,
-  .builder-layout {
+  .builder-layout,
+  .calendar-layout {
     grid-template-columns: 1fr;
   }
 
@@ -579,6 +815,10 @@ h3 {
   }
 
   .builder-card {
+    position: static;
+  }
+
+  .day-study {
     position: static;
   }
 }
@@ -605,8 +845,13 @@ h3 {
 
   .stats-band,
   .lesson-grid,
-  .phrase-list {
+  .phrase-list,
+  .months {
     grid-template-columns: 1fr;
+  }
+
+  .cat-mascot {
+    width: 8.5rem;
   }
 
   .phrase-card {
