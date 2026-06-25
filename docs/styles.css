@@ -901,6 +901,20 @@ h3 {
   font-size: 2.7rem;
 }
 
+.session-meta {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.score-actions {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.score-actions .secondary-action {
+  width: 100%;
+}
+
 .exercise-list {
   display: grid;
   gap: 1rem;
@@ -925,6 +939,16 @@ h3 {
   place-items: center;
   border-radius: 0.55rem;
   background: var(--soft);
+  font-weight: 800;
+}
+
+.exercise-topline small {
+  margin-left: auto;
+  padding: 0.24rem 0.52rem;
+  border-radius: 999px;
+  color: var(--green-dark);
+  background: var(--soft);
+  font-size: 0.72rem;
   font-weight: 800;
 }
 

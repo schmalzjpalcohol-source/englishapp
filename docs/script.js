@@ -216,7 +216,9 @@ const pageLinks = document.querySelectorAll("[data-page-link]");
 const pages = document.querySelectorAll("[data-page]");
 const exerciseList = document.querySelector("#exerciseList");
 const exerciseScore = document.querySelector("#exerciseScore");
+const exerciseMeta = document.querySelector("#exerciseMeta");
 const resetExercises = document.querySelector("#resetExercises");
+const shuffleExercises = document.querySelector("#shuffleExercises");
 const emailPhraseList = document.querySelector("#emailPhraseList");
 const emailOptions = document.querySelector("#emailOptions");
 const emailFeedback = document.querySelector("#emailFeedback");
@@ -231,6 +233,7 @@ let selectedDayCards = [];
 let studyFrontLang = "en";
 let quizDirection = "ja-en";
 let exerciseResults = {};
+let activeExerciseItems = [];
 
 const emailPhrases = [
   ["Thank you for your email.", "メールありがとうございます。", "メールの最初で使いやすい丁寧表現。"],
@@ -248,6 +251,7 @@ const emailPhrases = [
 const exerciseItems = [
   {
     id: "ex1",
+    category: "Meaning",
     type: "choice",
     title: "意味を選ぶ",
     prompt: "Can you speak more slowly?",
@@ -256,6 +260,7 @@ const exerciseItems = [
   },
   {
     id: "ex2",
+    category: "Phrase",
     type: "choice",
     title: "英語を選ぶ",
     prompt: "私はオペレーション部で働いています。",
@@ -264,6 +269,7 @@ const exerciseItems = [
   },
   {
     id: "ex3",
+    category: "Grammar",
     type: "blank",
     title: "空欄を埋める",
     prompt: "I'm working ___ the entrance.",
@@ -272,6 +278,7 @@ const exerciseItems = [
   },
   {
     id: "ex4",
+    category: "Grammar",
     type: "blank",
     title: "空欄を埋める",
     prompt: "Who is in ___?",
@@ -280,6 +287,7 @@ const exerciseItems = [
   },
   {
     id: "ex5",
+    category: "Reply",
     type: "choice",
     title: "仕事で自然な返事",
     prompt: "上司に確認して返信したい時",
@@ -288,11 +296,228 @@ const exerciseItems = [
   },
   {
     id: "ex6",
+    category: "Safety",
     type: "choice",
     title: "安全確認",
     prompt: "手袋は必要ですか。",
     answer: "Do I need gloves?",
     options: ["Do I need gloves?", "Is this urgent?", "The label is missing."],
+  },
+  {
+    id: "ex7",
+    category: "Meaning",
+    type: "choice",
+    title: "意味を選ぶ",
+    prompt: "Where should I put this?",
+    answer: "これはどこに置けばいいですか。",
+    options: ["これはどこに置けばいいですか。", "締め切りはいつですか。", "誰に報告すればいいですか。"],
+  },
+  {
+    id: "ex8",
+    category: "Meaning",
+    type: "choice",
+    title: "意味を選ぶ",
+    prompt: "The label is missing.",
+    answer: "ラベルがありません。",
+    options: ["ラベルがありません。", "箱が壊れています。", "注文が違います。"],
+  },
+  {
+    id: "ex9",
+    category: "Phrase",
+    type: "choice",
+    title: "英語を選ぶ",
+    prompt: "担当者は誰ですか。",
+    answer: "Who is in charge?",
+    options: ["Who is in charge?", "Where is my station?", "What is the deadline?"],
+  },
+  {
+    id: "ex10",
+    category: "Phrase",
+    type: "choice",
+    title: "英語を選ぶ",
+    prompt: "備品がもっと必要です。",
+    answer: "I need more supplies.",
+    options: ["I need more supplies.", "I made a mistake.", "I'm back from break."],
+  },
+  {
+    id: "ex11",
+    category: "Grammar",
+    type: "blank",
+    title: "空欄を埋める",
+    prompt: "I'm working ___ the stockroom.",
+    answer: "near",
+    options: ["near", "who", "need"],
+  },
+  {
+    id: "ex12",
+    category: "Grammar",
+    type: "blank",
+    title: "空欄を埋める",
+    prompt: "Do I need ___?",
+    answer: "gloves",
+    options: ["gloves", "urgent", "slowly"],
+  },
+  {
+    id: "ex13",
+    category: "Grammar",
+    type: "blank",
+    title: "空欄を埋める",
+    prompt: "Can you speak more ___?",
+    answer: "slowly",
+    options: ["slowly", "safe", "wrong"],
+  },
+  {
+    id: "ex14",
+    category: "Grammar",
+    type: "blank",
+    title: "空欄を埋める",
+    prompt: "Please say it ___.",
+    answer: "again",
+    options: ["again", "by", "out"],
+  },
+  {
+    id: "ex15",
+    category: "Email",
+    type: "choice",
+    title: "メール表現",
+    prompt: "添付ファイルをご確認ください。",
+    answer: "Please find the attached file.",
+    options: ["Please find the attached file.", "Use both hands.", "Where do I clock in?"],
+  },
+  {
+    id: "ex16",
+    category: "Email",
+    type: "choice",
+    title: "メール表現",
+    prompt: "確認して返信します。",
+    answer: "I will check and get back to you.",
+    options: ["I will check and get back to you.", "I'm going to break.", "The machine stopped."],
+  },
+  {
+    id: "ex17",
+    category: "Email",
+    type: "choice",
+    title: "メール表現",
+    prompt: "詳細を送っていただけますか。",
+    answer: "Could you send me the details?",
+    options: ["Could you send me the details?", "Could you wear a mask?", "Could you clock out?"],
+  },
+  {
+    id: "ex18",
+    category: "Email",
+    type: "choice",
+    title: "メール表現",
+    prompt: "遅れて申し訳ありません。",
+    answer: "I apologize for the delay.",
+    options: ["I apologize for the delay.", "I understand.", "I need help."],
+  },
+  {
+    id: "ex19",
+    category: "Safety",
+    type: "choice",
+    title: "安全確認",
+    prompt: "足元に気をつけて。",
+    answer: "Watch your step.",
+    options: ["Watch your step.", "Check this, please.", "Not yet."],
+  },
+  {
+    id: "ex20",
+    category: "Safety",
+    type: "choice",
+    title: "安全確認",
+    prompt: "両手を使って。",
+    answer: "Use both hands.",
+    options: ["Use both hands.", "Bring it here.", "Take a break."],
+  },
+  {
+    id: "ex21",
+    category: "Problem",
+    type: "choice",
+    title: "問題を伝える",
+    prompt: "機械が止まりました。",
+    answer: "The machine stopped.",
+    options: ["The machine stopped.", "The deadline is Friday.", "The register is here."],
+  },
+  {
+    id: "ex22",
+    category: "Problem",
+    type: "choice",
+    title: "問題を伝える",
+    prompt: "注文が違います。",
+    answer: "The order is wrong.",
+    options: ["The order is wrong.", "The box is heavy.", "The label is new."],
+  },
+  {
+    id: "ex23",
+    category: "Department",
+    type: "choice",
+    title: "部署名",
+    prompt: "VA オートメーション営業部",
+    answer: "Vacuum Automation Sales Division",
+    options: ["Vacuum Automation Sales Division", "Handling Systems Sales Division", "Operations Division"],
+  },
+  {
+    id: "ex24",
+    category: "Department",
+    type: "choice",
+    title: "部署名",
+    prompt: "受注管理",
+    answer: "Order Processing",
+    options: ["Order Processing", "Field Service", "Material Logistics"],
+  },
+  {
+    id: "ex25",
+    category: "Department",
+    type: "choice",
+    title: "部署名",
+    prompt: "品質保証",
+    answer: "QA",
+    options: ["QA", "GA/HR", "IT"],
+  },
+  {
+    id: "ex26",
+    category: "Reply",
+    type: "choice",
+    title: "自然な返事",
+    prompt: "まだ終わっていない時",
+    answer: "Not yet.",
+    options: ["Not yet.", "It's finished.", "I understand."],
+  },
+  {
+    id: "ex27",
+    category: "Reply",
+    type: "choice",
+    title: "自然な返事",
+    prompt: "今やっています。",
+    answer: "I'm on it.",
+    options: ["I'm on it.", "I'm new here.", "I'm back from break."],
+  },
+  {
+    id: "ex28",
+    category: "Question",
+    type: "choice",
+    title: "質問を作る",
+    prompt: "どこで出勤打刻しますか。",
+    answer: "Where do I clock in?",
+    options: ["Where do I clock in?", "Where do I clock out?", "Where is the label?"],
+  },
+  {
+    id: "ex29",
+    category: "Question",
+    type: "choice",
+    title: "質問を作る",
+    prompt: "誰に報告すればいいですか。",
+    answer: "Who do I report to?",
+    options: ["Who do I report to?", "Who can I help?", "Who is waiting?"],
+  },
+  {
+    id: "ex30",
+    category: "Priority",
+    type: "choice",
+    title: "優先度",
+    prompt: "これは急ぎですか。",
+    answer: "Is this urgent?",
+    options: ["Is this urgent?", "Is this safe?", "Is this okay?"],
   },
 ];
 
@@ -364,19 +589,43 @@ function renderEmailPhrases() {
 }
 
 function updateExerciseScore() {
-  const answered = Object.values(exerciseResults);
+  const activeIds = new Set(activeExerciseItems.map((item) => item.id));
+  const answered = Object.entries(exerciseResults)
+    .filter(([id]) => activeIds.has(id))
+    .map(([, result]) => result);
   const correct = answered.filter(Boolean).length;
-  exerciseScore.textContent = `${correct} / ${exerciseItems.length}`;
+  exerciseScore.textContent = `${correct} / ${activeExerciseItems.length}`;
+  exerciseMeta.textContent = `${activeExerciseItems.length} of ${exerciseItems.length} tasks`;
+}
+
+function shuffleArray(items) {
+  return [...items]
+    .map((item) => ({ item, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ item }) => item);
+}
+
+function buildExerciseSession() {
+  const byCategory = exerciseItems.reduce((groups, item) => {
+    groups[item.category] = groups[item.category] || [];
+    groups[item.category].push(item);
+    return groups;
+  }, {});
+  const starters = Object.values(byCategory).map((group) => shuffleArray(group)[0]).filter(Boolean);
+  const remaining = shuffleArray(exerciseItems.filter((item) => !starters.some((starter) => starter.id === item.id)));
+  activeExerciseItems = [...starters, ...remaining].slice(0, 12);
 }
 
 function renderExercises() {
-  exerciseList.innerHTML = exerciseItems
+  if (!activeExerciseItems.length) buildExerciseSession();
+  exerciseList.innerHTML = activeExerciseItems
     .map(
       (item, index) => `
         <article class="exercise-card" data-exercise="${item.id}">
           <div class="exercise-topline">
             <span>${String(index + 1).padStart(2, "0")}</span>
             <strong>${item.title}</strong>
+            <small>${item.category}</small>
           </div>
           <h3>${item.prompt}</h3>
           <div class="exercise-options">
@@ -393,7 +642,7 @@ function renderExercises() {
 }
 
 function answerExercise(id, value) {
-  const item = exerciseItems.find((exercise) => exercise.id === id);
+  const item = activeExerciseItems.find((exercise) => exercise.id === id);
   if (!item) return;
   const card = document.querySelector(`[data-exercise="${id}"]`);
   const feedback = document.querySelector(`#feedback-${id}`);
@@ -914,6 +1163,11 @@ prevQuiz.addEventListener("click", () => moveQuiz(-1));
 nextQuiz.addEventListener("click", () => moveQuiz(1));
 resetExercises.addEventListener("click", () => {
   exerciseResults = {};
+  renderExercises();
+});
+shuffleExercises.addEventListener("click", () => {
+  exerciseResults = {};
+  buildExerciseSession();
   renderExercises();
 });
 window.addEventListener("hashchange", () => showPage(getPageFromHash()));
