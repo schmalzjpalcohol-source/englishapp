@@ -1208,45 +1208,253 @@ h3 {
 
 @media (max-width: 680px) {
   .topbar {
-    align-items: flex-start;
-    flex-direction: column;
+    gap: 0.65rem;
+    align-items: stretch;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .brand {
+    font-size: 0.95rem;
+  }
+
+  .brand-mark {
+    width: 2rem;
+    height: 2rem;
   }
 
   .nav {
+    display: grid;
+    grid-auto-columns: max-content;
+    grid-auto-flow: column;
+    gap: 0.25rem;
     width: 100%;
     overflow-x: auto;
-    padding-bottom: 0.15rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.82rem;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav a {
+    padding: 0.48rem 0.62rem;
   }
 
   .hero {
-    padding-top: 2rem;
+    gap: 1rem;
+    padding: 1.5rem 0.85rem 1rem;
   }
 
   h1 {
-    max-width: 9ch;
+    max-width: 10ch;
+    font-size: clamp(2.45rem, 15vw, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 9vw, 2.5rem);
+  }
+
+  h3 {
+    font-size: 1.28rem;
+  }
+
+  .lead,
+  .section-heading p:not(.eyebrow) {
+    font-size: 0.98rem;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .primary-action,
+  .secondary-action {
+    width: 100%;
+  }
+
+  .hero-panel {
+    min-height: 19rem;
+    padding: 1rem;
+  }
+
+  .hero-panel h2 {
+    font-size: 2.15rem;
+  }
+
+  .section {
+    padding: 2.8rem 0.85rem;
+  }
+
+  .section-heading {
+    margin-bottom: 1.2rem;
   }
 
   .stats-band,
   .lesson-grid,
   .phrase-list,
   .months,
-  .email-phrase-list {
+  .email-phrase-list,
+  .email-layout,
+  .exercise-dashboard,
+  .calendar-layout,
+  .builder-layout {
     grid-template-columns: 1fr;
+  }
+
+  .stats-band {
+    margin: 0 0.85rem;
+  }
+
+  .stats-band div {
+    padding: 0.95rem;
   }
 
   .cat-mascot {
-    width: 8.5rem;
+    width: 7.25rem;
   }
 
-  .phrase-card {
+  .phrase-card,
+  .email-card {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .pattern-grid {
+  .calendar-board,
+  .day-study,
+  .builder-card,
+  .builder-options,
+  .score-card,
+  .email-mini-task,
+  .quiz-card,
+  .study-card {
+    border-radius: 0.7rem;
+  }
+
+  .calendar-header img {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .day-grid {
+    gap: 0.25rem;
+  }
+
+  .day-button {
+    border-radius: 0.45rem;
+    font-size: 0.78rem;
+  }
+
+  .day-button::after {
+    right: 0.12rem;
+    bottom: 0.02rem;
+    font-size: 0.85rem;
+  }
+
+  .front-toggle {
+    gap: 0.4rem;
+  }
+
+  .front-toggle button {
+    min-height: 2.75rem;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  .front-toggle button span {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .study-card,
+  .quiz-card {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .study-card h4,
+  .quiz-card h3 {
+    font-size: clamp(1.55rem, 9vw, 2.45rem);
+    overflow-wrap: anywhere;
+  }
+
+  .study-controls,
+  .quiz-controls {
+    display: grid;
+    grid-template-columns: 3rem 1fr 3rem;
+    gap: 0.55rem;
+  }
+
+  .daily-card-list button,
+  .exercise-options button,
+  .email-options button {
+    min-height: 2.8rem;
+    padding: 0.65rem;
+    font-size: 0.9rem;
+  }
+
+  .word-map div {
     grid-template-columns: 1fr;
   }
 
+  .word-chip {
+    width: 100%;
+  }
+
+  .exercise-card,
+  .email-task,
+  .email-card,
+  .lesson-card,
+  .phrase-card {
+    padding: 0.9rem;
+  }
+
+  .exercise-topline {
+    align-items: flex-start;
+  }
+
+  .exercise-topline small {
+    white-space: nowrap;
+  }
+
+  .mail-preview {
+    padding: 0.8rem;
+    font-size: 0.92rem;
+  }
+
+  .select-field select {
+    min-height: 3rem;
+    font-size: 0.92rem;
+  }
+
   .footer {
+    flex-direction: column;
+    padding: 1.5rem 0.85rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .topbar {
+    padding-inline: 0.65rem;
+  }
+
+  .section,
+  .hero {
+    padding-inline: 0.65rem;
+  }
+
+  .stats-band {
+    margin-inline: 0.65rem;
+  }
+
+  .front-toggle {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-header,
+  .day-study-top {
+    align-items: flex-start;
     flex-direction: column;
   }
 }
