@@ -212,12 +212,12 @@
         </div>
 
         <div class="email-layout">
-          <div class="email-phrase-list" id="emailPhraseList"></div>
           <div class="email-mini-task">
             <p class="builder-label">Email tasks</p>
             <h3>メールで使う英語を選ぶ</h3>
             <div class="email-task-list" id="emailTaskList"></div>
           </div>
+          <div class="email-phrase-list" id="emailPhraseList"></div>
         </div>
       </section>
 
@@ -238,14 +238,14 @@
             <button class="primary-action" id="speakBuiltSentence">聞く</button>
           </div>
           <div class="builder-options" aria-label="文のオプション">
-            <div>
+            <label class="select-field">
               <p class="option-title">場所 / 部署</p>
-              <div class="option-row" id="departmentOptions"></div>
-            </div>
-            <div>
+              <select id="departmentOptions"></select>
+            </label>
+            <label class="select-field">
               <p class="option-title">言い方</p>
-              <div class="pattern-grid" id="patternOptions"></div>
-            </div>
+              <select id="patternOptions"></select>
+            </label>
           </div>
         </div>
       </section>

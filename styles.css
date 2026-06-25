@@ -740,7 +740,7 @@ h3 {
 
 .builder-layout {
   display: grid;
-  grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.58fr);
   gap: 1rem;
   align-items: start;
 }
@@ -768,7 +768,7 @@ h3 {
 }
 
 .builder-card h3 {
-  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  font-size: clamp(1.65rem, 3.4vw, 2.75rem);
 }
 
 .builder-card p:last-of-type {
@@ -778,20 +778,25 @@ h3 {
 
 .builder-options {
   display: grid;
-  gap: 1.4rem;
+  gap: 1rem;
   padding: clamp(1rem, 3vw, 1.4rem);
 }
 
-.option-row,
-.pattern-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
+.select-field {
+  display: grid;
+  gap: 0.45rem;
 }
 
-.pattern-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.select-field select {
+  width: 100%;
+  min-height: 3.2rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  font-weight: 800;
 }
 
 .choice-button,
@@ -1021,7 +1026,7 @@ h3 {
 
 .email-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
+  grid-template-columns: minmax(20rem, 0.86fr) minmax(0, 1fr);
   gap: 1rem;
   align-items: start;
 }
@@ -1056,8 +1061,6 @@ h3 {
 }
 
 .email-mini-task {
-  position: sticky;
-  top: 6rem;
   padding: 1.2rem;
 }
 
@@ -1068,6 +1071,11 @@ h3 {
 
 .email-task {
   padding: 1rem;
+}
+
+.email-task h3,
+.email-task .mail-preview {
+  margin-bottom: 0.75rem;
 }
 
 .email-task.is-correct {

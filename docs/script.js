@@ -722,25 +722,17 @@ function answerExercise(id, value) {
 function renderBuilderOptions() {
   departmentOptions.innerHTML = workAreas
     .map(
-      (area, index) => `
-        <button class="choice-button ${index === selectedArea ? "is-selected" : ""}" data-department="${index}">
-          ${area.short}<br />
-          <span>${area.jp}</span>
-        </button>
-      `,
+      (area, index) => `<option value="${index}">${area.short} - ${area.jp}</option>`,
     )
     .join("");
+  departmentOptions.value = String(selectedArea);
 
   patternOptions.innerHTML = patterns
     .map(
-      (pattern, index) => `
-        <button class="pattern-button ${index === selectedPattern ? "is-selected" : ""}" data-pattern="${index}">
-          ${pattern.label}
-          <span>${pattern.help}</span>
-        </button>
-      `,
+      (pattern, index) => `<option value="${index}">${pattern.label} / ${pattern.help}</option>`,
     )
     .join("");
+  patternOptions.value = String(selectedPattern);
 }
 
 function renderBuiltSentence() {
@@ -1167,20 +1159,6 @@ document.addEventListener("click", (event) => {
     return;
   }
 
-  const departmentButton = event.target.closest("[data-department]");
-  if (departmentButton) {
-    selectedArea = Number(departmentButton.dataset.department);
-    renderBuilderOptions();
-    renderBuiltSentence();
-  }
-
-  const patternButton = event.target.closest("[data-pattern]");
-  if (patternButton) {
-    selectedPattern = Number(patternButton.dataset.pattern);
-    renderBuilderOptions();
-    renderBuiltSentence();
-  }
-
   const calendarDayButton = event.target.closest("[data-calendar-day]");
   if (calendarDayButton) {
     selectedDayIndex = Number(calendarDayButton.dataset.calendarDay);
@@ -1224,6 +1202,14 @@ prevStudyCard.addEventListener("click", () => moveStudyCard(-1));
 nextStudyCard.addEventListener("click", () => moveStudyCard(1));
 prevQuiz.addEventListener("click", () => moveQuiz(-1));
 nextQuiz.addEventListener("click", () => moveQuiz(1));
+departmentOptions.addEventListener("change", () => {
+  selectedArea = Number(departmentOptions.value);
+  renderBuiltSentence();
+});
+patternOptions.addEventListener("change", () => {
+  selectedPattern = Number(patternOptions.value);
+  renderBuiltSentence();
+});
 resetExercises.addEventListener("click", () => {
   exerciseResults = {};
   renderExercises();
