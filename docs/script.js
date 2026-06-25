@@ -234,6 +234,7 @@ let studyFrontLang = "en";
 let quizDirection = "ja-en";
 let exerciseResults = {};
 let activeExerciseItems = [];
+let exerciseSessionNumber = 1;
 
 const emailPhrases = [
   ["Thank you for your email.", "メールありがとうございます。", "メールの最初で使いやすい丁寧表現。"],
@@ -595,7 +596,7 @@ function updateExerciseScore() {
     .map(([, result]) => result);
   const correct = answered.filter(Boolean).length;
   exerciseScore.textContent = `${correct} / ${activeExerciseItems.length}`;
-  exerciseMeta.textContent = `${activeExerciseItems.length} of ${exerciseItems.length} tasks`;
+  exerciseMeta.textContent = `Mix ${exerciseSessionNumber} · ${activeExerciseItems.length} of ${exerciseItems.length} tasks`;
 }
 
 function shuffleArray(items) {
@@ -611,9 +612,12 @@ function buildExerciseSession() {
     groups[item.category].push(item);
     return groups;
   }, {});
-  const starters = Object.values(byCategory).map((group) => shuffleArray(group)[0]).filter(Boolean);
-  const remaining = shuffleArray(exerciseItems.filter((item) => !starters.some((starter) => starter.id === item.id)));
-  activeExerciseItems = [...starters, ...remaining].slice(0, 12);
+  const categoryStarters = shuffleArray(Object.values(byCategory))
+    .slice(0, 6)
+    .map((group) => shuffleArray(group)[0])
+    .filter(Boolean);
+  const remaining = shuffleArray(exerciseItems.filter((item) => !categoryStarters.some((starter) => starter.id === item.id)));
+  activeExerciseItems = shuffleArray([...categoryStarters, ...remaining.slice(0, 6)]);
 }
 
 function renderExercises() {
@@ -1167,6 +1171,7 @@ resetExercises.addEventListener("click", () => {
 });
 shuffleExercises.addEventListener("click", () => {
   exerciseResults = {};
+  exerciseSessionNumber += 1;
   buildExerciseSession();
   renderExercises();
 });
