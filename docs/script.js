@@ -220,9 +220,7 @@ const exerciseMeta = document.querySelector("#exerciseMeta");
 const resetExercises = document.querySelector("#resetExercises");
 const shuffleExercises = document.querySelector("#shuffleExercises");
 const emailPhraseList = document.querySelector("#emailPhraseList");
-const emailOptions = document.querySelector("#emailOptions");
-const emailFeedback = document.querySelector("#emailFeedback");
-const emailBlank = document.querySelector("#emailBlank");
+const emailTaskList = document.querySelector("#emailTaskList");
 
 let quizIndex = 0;
 let selectedArea = 0;
@@ -247,6 +245,51 @@ const emailPhrases = [
   ["Thank you for your support.", "ご対応ありがとうございます。", "メールの締めで使いやすい表現。"],
   ["I apologize for the delay.", "遅れて申し訳ありません。", "返信や作業が遅れた時。"],
   ["Please let me know if you have any questions.", "質問があれば教えてください。", "最後に添える丁寧な一文。"],
+];
+
+const emailTasks = [
+  {
+    id: "mail1",
+    title: "確認をお願いする",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Could you please confirm this?",
+    options: ["Could you please confirm this?", "Watch your step.", "It's too heavy."],
+  },
+  {
+    id: "mail2",
+    title: "添付ファイル",
+    prompt: "Hello,\n_____\nBest regards,",
+    answer: "Please find the attached file.",
+    options: ["Please find the attached file.", "Do I need gloves?", "Where is my station?"],
+  },
+  {
+    id: "mail3",
+    title: "返信を待ってもらう",
+    prompt: "Thank you for your email.\n_____\nBest regards,",
+    answer: "I will check and get back to you.",
+    options: ["I will check and get back to you.", "The box is damaged.", "Use both hands."],
+  },
+  {
+    id: "mail4",
+    title: "詳細を依頼する",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Could you send me the details?",
+    options: ["Could you send me the details?", "I'm going to break.", "Put it down."],
+  },
+  {
+    id: "mail5",
+    title: "遅れた時",
+    prompt: "Hello,\n_____\nI will send it today.",
+    answer: "I apologize for the delay.",
+    options: ["I apologize for the delay.", "I understand.", "Take a break."],
+  },
+  {
+    id: "mail6",
+    title: "締めの一文",
+    prompt: "Best regards,\n_____\n",
+    answer: "Please let me know if you have any questions.",
+    options: ["Please let me know if you have any questions.", "The order is wrong.", "Follow me."],
+  },
 ];
 
 const exerciseItems = [
@@ -580,12 +623,24 @@ function renderEmailPhrases() {
     )
     .join("");
 
-  emailOptions.innerHTML = [
-    "Could you please confirm this?",
-    "Watch your step.",
-    "It's too heavy.",
-  ]
-    .map((option) => `<button type="button" data-email-answer="${option}">${option}</button>`)
+  emailTaskList.innerHTML = emailTasks
+    .map(
+      (task, index) => `
+        <article class="email-task" data-email-task="${task.id}">
+          <div class="exercise-topline">
+            <span>${String(index + 1).padStart(2, "0")}</span>
+            <strong>${task.title}</strong>
+          </div>
+          <p class="mail-preview">${task.prompt.replace(/\n/g, "<br />").replace("_____", "<mark>_____</mark>")}</p>
+          <div class="email-options">
+            ${task.options
+              .map((option) => `<button type="button" data-email-answer="${task.id}" data-value="${option}">${option}</button>`)
+              .join("")}
+          </div>
+          <p class="exercise-feedback" id="email-feedback-${task.id}"></p>
+        </article>
+      `,
+    )
     .join("");
 }
 
@@ -1076,14 +1131,18 @@ document.addEventListener("click", (event) => {
 
   const emailAnswer = event.target.closest("[data-email-answer]");
   if (emailAnswer) {
-    const isCorrect = emailAnswer.dataset.emailAnswer === "Could you please confirm this?";
-    emailBlank.textContent = emailAnswer.dataset.emailAnswer;
-    emailFeedback.textContent = isCorrect ? "正解です。確認をお願いするメールに合います。" : "もう一度。ここでは確認をお願いする表現が必要です。";
-    emailFeedback.classList.toggle("is-correct", isCorrect);
-    emailFeedback.classList.toggle("is-wrong", !isCorrect);
-    emailOptions.querySelectorAll("button").forEach((button) => {
+    const task = emailTasks.find((item) => item.id === emailAnswer.dataset.emailAnswer);
+    if (!task) return;
+    const card = document.querySelector(`[data-email-task="${task.id}"]`);
+    const feedback = document.querySelector(`#email-feedback-${task.id}`);
+    const isCorrect = emailAnswer.dataset.value === task.answer;
+    card.classList.toggle("is-correct", isCorrect);
+    card.classList.toggle("is-wrong", !isCorrect);
+    feedback.textContent = isCorrect ? "正解です。メールの流れに合っています。" : `もう一度。正解は: ${task.answer}`;
+    card.querySelector("mark").textContent = emailAnswer.dataset.value;
+    card.querySelectorAll("[data-email-answer]").forEach((button) => {
       button.classList.toggle("is-selected", button === emailAnswer);
-      button.classList.toggle("is-answer", button.dataset.emailAnswer === "Could you please confirm this?");
+      button.classList.toggle("is-answer", button.dataset.value === task.answer);
     });
     return;
   }

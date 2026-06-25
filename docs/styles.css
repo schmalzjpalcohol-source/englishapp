@@ -331,6 +331,7 @@ h3 {
 .quiz-card,
 .exercise-card,
 .email-card,
+.email-task,
 .email-mini-task,
 .score-card {
   background: rgba(255, 255, 255, 0.9);
@@ -1060,6 +1061,25 @@ h3 {
   padding: 1.2rem;
 }
 
+.email-task-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.email-task {
+  padding: 1rem;
+}
+
+.email-task.is-correct {
+  border-color: #35a86b;
+  box-shadow: 0 12px 34px rgba(53, 168, 107, 0.14);
+}
+
+.email-task.is-wrong {
+  border-color: #dc5c5c;
+  box-shadow: 0 12px 34px rgba(220, 92, 92, 0.13);
+}
+
 .mail-preview {
   padding: 1rem;
   background: var(--soft);
@@ -1069,8 +1089,11 @@ h3 {
   font-weight: 700;
 }
 
-#emailBlank {
+.mail-preview mark {
   color: var(--green-dark);
+  background: rgba(244, 211, 94, 0.4);
+  border-radius: 0.35rem;
+  padding: 0.05rem 0.25rem;
   font-weight: 800;
 }
 
