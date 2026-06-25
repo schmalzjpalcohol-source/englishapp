@@ -85,9 +85,18 @@ a {
   border-radius: 999px;
 }
 
-.nav a:hover {
+.nav a:hover,
+.nav a.is-active {
   color: var(--green-dark);
   background: var(--soft);
+}
+
+.page {
+  display: none;
+}
+
+.page.is-active {
+  display: block;
 }
 
 .hero {
@@ -319,7 +328,11 @@ h3 {
 
 .lesson-card,
 .phrase-card,
-.quiz-card {
+.quiz-card,
+.exercise-card,
+.email-card,
+.email-mini-task,
+.score-card {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--line);
   border-radius: 0.8rem;
@@ -865,6 +878,178 @@ h3 {
   align-items: start;
 }
 
+.exercises-section {
+  background:
+    linear-gradient(180deg, rgba(191, 232, 197, 0.24), rgba(255, 255, 255, 0)),
+    var(--paper);
+}
+
+.exercise-dashboard {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.35fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.score-card {
+  position: sticky;
+  top: 6rem;
+  padding: 1.2rem;
+}
+
+.score-card h3 {
+  font-size: 2.7rem;
+}
+
+.exercise-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.exercise-card {
+  padding: 1.1rem;
+}
+
+.exercise-topline {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.7rem;
+  color: var(--green);
+}
+
+.exercise-topline span {
+  display: inline-grid;
+  width: 2.2rem;
+  height: 2.2rem;
+  place-items: center;
+  border-radius: 0.55rem;
+  background: var(--soft);
+  font-weight: 800;
+}
+
+.exercise-card h3 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.exercise-options,
+.email-options {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.exercise-options button,
+.email-options button {
+  min-height: 3rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  font-weight: 800;
+  text-align: left;
+}
+
+.exercise-options button.is-selected,
+.email-options button.is-selected {
+  border-color: var(--green-dark);
+}
+
+.exercise-options button.is-answer,
+.email-options button.is-answer {
+  background: var(--soft);
+}
+
+.exercise-card.is-correct {
+  border-color: #35a86b;
+  box-shadow: 0 12px 34px rgba(53, 168, 107, 0.14);
+}
+
+.exercise-card.is-wrong {
+  border-color: #dc5c5c;
+  box-shadow: 0 12px 34px rgba(220, 92, 92, 0.13);
+}
+
+.exercise-feedback {
+  min-height: 1.4rem;
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.exercise-card.is-correct .exercise-feedback,
+.exercise-feedback.is-correct {
+  color: #1b7a4a;
+}
+
+.exercise-card.is-wrong .exercise-feedback,
+.exercise-feedback.is-wrong {
+  color: #b63f3f;
+}
+
+.email-section {
+  background:
+    linear-gradient(135deg, rgba(244, 211, 94, 0.12), rgba(191, 232, 197, 0.22)),
+    var(--paper);
+}
+
+.email-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.email-phrase-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.email-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem;
+  padding: 1rem;
+}
+
+.email-card strong,
+.email-card span,
+.email-card small {
+  display: block;
+}
+
+.email-card span,
+.email-card small {
+  color: var(--muted);
+}
+
+.email-card small {
+  margin-top: 0.45rem;
+  font-weight: 700;
+}
+
+.email-mini-task {
+  position: sticky;
+  top: 6rem;
+  padding: 1.2rem;
+}
+
+.mail-preview {
+  padding: 1rem;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+#emailBlank {
+  color: var(--green-dark);
+  font-weight: 800;
+}
+
 .quiz-shell {
   position: sticky;
   top: 6rem;
@@ -932,7 +1117,9 @@ h3 {
   .hero,
   .practice-section,
   .builder-layout,
-  .calendar-layout {
+  .calendar-layout,
+  .exercise-dashboard,
+  .email-layout {
     grid-template-columns: 1fr;
   }
 
@@ -957,7 +1144,9 @@ h3 {
     position: static;
   }
 
-  .day-study {
+  .day-study,
+  .score-card,
+  .email-mini-task {
     position: static;
   }
 }
@@ -985,7 +1174,8 @@ h3 {
   .stats-band,
   .lesson-grid,
   .phrase-list,
-  .months {
+  .months,
+  .email-phrase-list {
     grid-template-columns: 1fr;
   }
 

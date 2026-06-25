@@ -212,6 +212,15 @@ const quizWordMap = document.querySelector("#quizWordMap");
 const speakQuiz = document.querySelector("#speakQuiz");
 const prevQuiz = document.querySelector("#prevQuiz");
 const nextQuiz = document.querySelector("#nextQuiz");
+const pageLinks = document.querySelectorAll("[data-page-link]");
+const pages = document.querySelectorAll("[data-page]");
+const exerciseList = document.querySelector("#exerciseList");
+const exerciseScore = document.querySelector("#exerciseScore");
+const resetExercises = document.querySelector("#resetExercises");
+const emailPhraseList = document.querySelector("#emailPhraseList");
+const emailOptions = document.querySelector("#emailOptions");
+const emailFeedback = document.querySelector("#emailFeedback");
+const emailBlank = document.querySelector("#emailBlank");
 
 let quizIndex = 0;
 let selectedArea = 0;
@@ -221,6 +230,71 @@ let selectedStudyIndex = 0;
 let selectedDayCards = [];
 let studyFrontLang = "en";
 let quizDirection = "ja-en";
+let exerciseResults = {};
+
+const emailPhrases = [
+  ["Thank you for your email.", "メールありがとうございます。", "メールの最初で使いやすい丁寧表現。"],
+  ["Could you please confirm this?", "これを確認していただけますか。", "相手に確認をお願いする時。"],
+  ["Please find the attached file.", "添付ファイルをご確認ください。", "添付資料を送る時。"],
+  ["I will check and get back to you.", "確認して返信します。", "すぐ答えられない時の安全な返信。"],
+  ["Could you send me the details?", "詳細を送っていただけますか。", "情報が足りない時。"],
+  ["I have a question about this order.", "この注文について質問があります。", "注文や案件について聞く時。"],
+  ["The deadline is Friday.", "締め切りは金曜日です。", "期限を伝える時。"],
+  ["Thank you for your support.", "ご対応ありがとうございます。", "メールの締めで使いやすい表現。"],
+  ["I apologize for the delay.", "遅れて申し訳ありません。", "返信や作業が遅れた時。"],
+  ["Please let me know if you have any questions.", "質問があれば教えてください。", "最後に添える丁寧な一文。"],
+];
+
+const exerciseItems = [
+  {
+    id: "ex1",
+    type: "choice",
+    title: "意味を選ぶ",
+    prompt: "Can you speak more slowly?",
+    answer: "もう少しゆっくり話してくれますか。",
+    options: ["もう少しゆっくり話してくれますか。", "今始めてもいいですか。", "どこへ行けばいいですか。"],
+  },
+  {
+    id: "ex2",
+    type: "choice",
+    title: "英語を選ぶ",
+    prompt: "私はオペレーション部で働いています。",
+    answer: "I'm working in the Operations Division.",
+    options: ["I'm working in the Operations Division.", "I need more supplies.", "Where is my station?"],
+  },
+  {
+    id: "ex3",
+    type: "blank",
+    title: "空欄を埋める",
+    prompt: "I'm working ___ the entrance.",
+    answer: "by",
+    options: ["by", "need", "who"],
+  },
+  {
+    id: "ex4",
+    type: "blank",
+    title: "空欄を埋める",
+    prompt: "Who is in ___?",
+    answer: "charge",
+    options: ["charge", "careful", "deadline"],
+  },
+  {
+    id: "ex5",
+    type: "choice",
+    title: "仕事で自然な返事",
+    prompt: "上司に確認して返信したい時",
+    answer: "I'll check and get back to you.",
+    options: ["I'll check and get back to you.", "Watch your step.", "Put it down."],
+  },
+  {
+    id: "ex6",
+    type: "choice",
+    title: "安全確認",
+    prompt: "手袋は必要ですか。",
+    answer: "Do I need gloves?",
+    options: ["Do I need gloves?", "Is this urgent?", "The label is missing."],
+  },
+];
 
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
@@ -229,6 +303,22 @@ function speak(text) {
   utterance.lang = "en-US";
   utterance.rate = 0.82;
   window.speechSynthesis.speak(utterance);
+}
+
+function showPage(pageName) {
+  const selectedPage = pageName || "home";
+  pages.forEach((page) => {
+    page.classList.toggle("is-active", page.dataset.page === selectedPage);
+  });
+  pageLinks.forEach((link) => {
+    link.classList.toggle("is-active", link.dataset.pageLink === selectedPage);
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function getPageFromHash() {
+  const page = window.location.hash.replace("#", "");
+  return document.querySelector(`[data-page="${page}"]`) ? page : "home";
 }
 
 function renderPhrases() {
@@ -246,6 +336,79 @@ function renderPhrases() {
       `,
     )
     .join("");
+}
+
+function renderEmailPhrases() {
+  emailPhraseList.innerHTML = emailPhrases
+    .map(
+      ([english, japanese, note]) => `
+        <article class="email-card">
+          <button class="phrase-sound" data-speak="${english}" aria-label="${english} を聞く">▶</button>
+          <div>
+            <strong>${english}</strong>
+            <span>${japanese}</span>
+            <small>${note}</small>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+
+  emailOptions.innerHTML = [
+    "Could you please confirm this?",
+    "Watch your step.",
+    "It's too heavy.",
+  ]
+    .map((option) => `<button type="button" data-email-answer="${option}">${option}</button>`)
+    .join("");
+}
+
+function updateExerciseScore() {
+  const answered = Object.values(exerciseResults);
+  const correct = answered.filter(Boolean).length;
+  exerciseScore.textContent = `${correct} / ${exerciseItems.length}`;
+}
+
+function renderExercises() {
+  exerciseList.innerHTML = exerciseItems
+    .map(
+      (item, index) => `
+        <article class="exercise-card" data-exercise="${item.id}">
+          <div class="exercise-topline">
+            <span>${String(index + 1).padStart(2, "0")}</span>
+            <strong>${item.title}</strong>
+          </div>
+          <h3>${item.prompt}</h3>
+          <div class="exercise-options">
+            ${item.options
+              .map((option) => `<button type="button" data-exercise-option="${item.id}" data-value="${option}">${option}</button>`)
+              .join("")}
+          </div>
+          <p class="exercise-feedback" id="feedback-${item.id}"></p>
+        </article>
+      `,
+    )
+    .join("");
+  updateExerciseScore();
+}
+
+function answerExercise(id, value) {
+  const item = exerciseItems.find((exercise) => exercise.id === id);
+  if (!item) return;
+  const card = document.querySelector(`[data-exercise="${id}"]`);
+  const feedback = document.querySelector(`#feedback-${id}`);
+  const isCorrect = value === item.answer;
+  exerciseResults[id] = isCorrect;
+
+  card.classList.toggle("is-correct", isCorrect);
+  card.classList.toggle("is-wrong", !isCorrect);
+  feedback.textContent = isCorrect ? "正解です。よくできました。" : `もう一度。正解は: ${item.answer}`;
+  card.querySelectorAll("[data-exercise-option]").forEach((button) => {
+    const isSelected = button.dataset.value === value;
+    button.classList.toggle("is-selected", isSelected);
+    button.classList.toggle("is-answer", button.dataset.value === item.answer);
+  });
+  updateExerciseScore();
 }
 
 function renderBuilderOptions() {
@@ -643,6 +806,35 @@ function moveQuiz(direction) {
 }
 
 document.addEventListener("click", (event) => {
+  const pageLink = event.target.closest("[data-page-link]");
+  if (pageLink) {
+    event.preventDefault();
+    const pageName = pageLink.dataset.pageLink;
+    history.pushState(null, "", `#${pageName}`);
+    showPage(pageName);
+    return;
+  }
+
+  const exerciseOption = event.target.closest("[data-exercise-option]");
+  if (exerciseOption) {
+    answerExercise(exerciseOption.dataset.exerciseOption, exerciseOption.dataset.value);
+    return;
+  }
+
+  const emailAnswer = event.target.closest("[data-email-answer]");
+  if (emailAnswer) {
+    const isCorrect = emailAnswer.dataset.emailAnswer === "Could you please confirm this?";
+    emailBlank.textContent = emailAnswer.dataset.emailAnswer;
+    emailFeedback.textContent = isCorrect ? "正解です。確認をお願いするメールに合います。" : "もう一度。ここでは確認をお願いする表現が必要です。";
+    emailFeedback.classList.toggle("is-correct", isCorrect);
+    emailFeedback.classList.toggle("is-wrong", !isCorrect);
+    emailOptions.querySelectorAll("button").forEach((button) => {
+      button.classList.toggle("is-selected", button === emailAnswer);
+      button.classList.toggle("is-answer", button.dataset.emailAnswer === "Could you please confirm this?");
+    });
+    return;
+  }
+
   const frontButton = event.target.closest("[data-front-lang]");
   if (frontButton) {
     studyFrontLang = frontButton.dataset.frontLang;
@@ -720,9 +912,17 @@ prevStudyCard.addEventListener("click", () => moveStudyCard(-1));
 nextStudyCard.addEventListener("click", () => moveStudyCard(1));
 prevQuiz.addEventListener("click", () => moveQuiz(-1));
 nextQuiz.addEventListener("click", () => moveQuiz(1));
+resetExercises.addEventListener("click", () => {
+  exerciseResults = {};
+  renderExercises();
+});
+window.addEventListener("hashchange", () => showPage(getPageFromHash()));
 
 renderPhrases();
+renderEmailPhrases();
+renderExercises();
 renderBuilderOptions();
 renderBuiltSentence();
 renderSelectedDay();
 renderQuiz();
+showPage(getPageFromHash());

@@ -19,109 +19,113 @@
         <span>Green Step English</span>
       </a>
       <nav class="nav" aria-label="メインナビゲーション">
-        <a href="#steps">ステップ</a>
-        <a href="#calendar">カレンダー</a>
-        <a href="#builder">文を作る</a>
-        <a href="#work">職場フレーズ</a>
-        <a href="#practice">練習</a>
+        <a class="is-active" href="#home" data-page-link="home">Home</a>
+        <a href="#calendar" data-page-link="calendar">カレンダー</a>
+        <a href="#exercises" data-page-link="exercises"> Übungen</a>
+        <a href="#email" data-page-link="email">Email</a>
+        <a href="#builder" data-page-link="builder">文を作る</a>
+        <a href="#work" data-page-link="work">Phrases</a>
+        <a href="#practice" data-page-link="practice">Practice</a>
       </nav>
     </header>
 
     <main id="top">
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">For Japanese beginners</p>
-          <h1>英語を、仕事で使える順番で。</h1>
-          <p class="lead">
-            I / you / me / them から、現場で聞こえる短い指示まで。
-            ねこのカレンダーで、毎日少しずつ覚えるためのミニアプリです。
-          </p>
-          <div class="hero-actions">
-            <a class="primary-action" href="#steps">はじめる</a>
-            <a class="secondary-action" href="#work">フレーズを見る</a>
+      <div class="page is-active" data-page="home">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">For Japanese beginners</p>
+            <h1>英語を、仕事で使える順番で。</h1>
+            <p class="lead">
+              I / you / me / them から、現場で聞こえる短い指示まで。
+              ねこのカレンダーで、毎日少しずつ覚えるためのミニアプリです。
+            </p>
+            <div class="hero-actions">
+              <a class="primary-action" href="#calendar" data-page-link="calendar">今日のカード</a>
+              <a class="secondary-action" href="#exercises" data-page-link="exercises"> Übungen starten</a>
+            </div>
           </div>
-        </div>
-        <div class="hero-panel" aria-label="今日のミニレッスン">
-          <img class="cat-mascot" src="assets/study-cat.png" alt="英語を勉強するねこのマスコット" />
-          <div class="panel-topline">
-            <span>Today</span>
-            <strong>8 min</strong>
+          <div class="hero-panel" aria-label="今日のミニレッスン">
+            <img class="cat-mascot" src="assets/study-cat.png" alt="英語を勉強するねこのマスコット" />
+            <div class="panel-topline">
+              <span>Today</span>
+              <strong>8 min</strong>
+            </div>
+            <p class="mini-label">聞こえたらすぐ反応</p>
+            <h2>Be careful.</h2>
+            <p>気をつけて。</p>
+            <div class="sound-row">
+              <button class="sound-button" data-speak="Be careful.">▶</button>
+              <span>/bi ker-fuhl/</span>
+            </div>
           </div>
-          <p class="mini-label">聞こえたらすぐ反応</p>
-          <h2>Be careful.</h2>
-          <p>気をつけて。</p>
-          <div class="sound-row">
-            <button class="sound-button" data-speak="Be careful.">▶</button>
-            <span>/bi ker-fuhl/</span>
+        </section>
+
+        <section class="stats-band" aria-label="学習の流れ">
+          <div>
+            <strong>4</strong>
+            <span>基本ステップ</span>
           </div>
-        </div>
-      </section>
+          <div>
+            <strong>50+</strong>
+            <span>重要フレーズ</span>
+          </div>
+          <div>
+            <strong>2ヶ月</strong>
+            <span>復習カレンダー</span>
+          </div>
+        </section>
 
-      <section class="stats-band" aria-label="学習の流れ">
-        <div>
-          <strong>4</strong>
-          <span>基本ステップ</span>
-        </div>
-        <div>
-          <strong>50+</strong>
-          <span>重要フレーズ</span>
-        </div>
-        <div>
-          <strong>2ヶ月</strong>
-          <span>復習カレンダー</span>
-        </div>
-      </section>
+        <section class="section intro-section" id="steps">
+          <div class="section-heading">
+            <p class="eyebrow">Step by step</p>
+            <h2>まずは「誰が・誰を」をつかむ</h2>
+            <p>
+              英語は短くても、誰のことかが大事です。仕事の会話でよく出る形から覚えます。
+            </p>
+          </div>
 
-      <section class="section intro-section" id="steps">
-        <div class="section-heading">
-          <p class="eyebrow">Step by step</p>
-          <h2>まずは「誰が・誰を」をつかむ</h2>
-          <p>
-            英語は短くても、誰のことかが大事です。仕事の会話でよく出る形から覚えます。
-          </p>
-        </div>
+          <div class="lesson-grid">
+            <article class="lesson-card">
+              <span class="step-number">01</span>
+              <h3>I / me</h3>
+              <p class="jp">I = 私が、me = 私に / 私を</p>
+              <ul>
+                <li><button data-speak="I can do it.">I can do it.</button><span>私ができます。</span></li>
+                <li><button data-speak="Please tell me.">Please tell me.</button><span>私に教えてください。</span></li>
+              </ul>
+            </article>
+            <article class="lesson-card">
+              <span class="step-number">02</span>
+              <h3>You / your</h3>
+              <p class="jp">you = あなた、your = あなたの</p>
+              <ul>
+                <li><button data-speak="Are you ready?">Are you ready?</button><span>準備できましたか。</span></li>
+                <li><button data-speak="Is this your bag?">Is this your bag?</button><span>これはあなたのバッグですか。</span></li>
+              </ul>
+            </article>
+            <article class="lesson-card">
+              <span class="step-number">03</span>
+              <h3>He / she / they</h3>
+              <p class="jp">he = 彼、she = 彼女、they = 彼ら / その人たち</p>
+              <ul>
+                <li><button data-speak="She is on break.">She is on break.</button><span>彼女は休憩中です。</span></li>
+                <li><button data-speak="They are waiting.">They are waiting.</button><span>彼らは待っています。</span></li>
+              </ul>
+            </article>
+            <article class="lesson-card">
+              <span class="step-number">04</span>
+              <h3>Us / them</h3>
+              <p class="jp">us = 私たちに、them = 彼らに / それらを</p>
+              <ul>
+                <li><button data-speak="Please help us.">Please help us.</button><span>私たちを手伝ってください。</span></li>
+                <li><button data-speak="Put them here.">Put them here.</button><span>それらをここに置いてください。</span></li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </div>
 
-        <div class="lesson-grid">
-          <article class="lesson-card">
-            <span class="step-number">01</span>
-            <h3>I / me</h3>
-            <p class="jp">I = 私が、me = 私に / 私を</p>
-            <ul>
-              <li><button data-speak="I can do it.">I can do it.</button><span>私ができます。</span></li>
-              <li><button data-speak="Please tell me.">Please tell me.</button><span>私に教えてください。</span></li>
-            </ul>
-          </article>
-          <article class="lesson-card">
-            <span class="step-number">02</span>
-            <h3>You / your</h3>
-            <p class="jp">you = あなた、your = あなたの</p>
-            <ul>
-              <li><button data-speak="Are you ready?">Are you ready?</button><span>準備できましたか。</span></li>
-              <li><button data-speak="Is this your bag?">Is this your bag?</button><span>これはあなたのバッグですか。</span></li>
-            </ul>
-          </article>
-          <article class="lesson-card">
-            <span class="step-number">03</span>
-            <h3>He / she / they</h3>
-            <p class="jp">he = 彼、she = 彼女、they = 彼ら / その人たち</p>
-            <ul>
-              <li><button data-speak="She is on break.">She is on break.</button><span>彼女は休憩中です。</span></li>
-              <li><button data-speak="They are waiting.">They are waiting.</button><span>彼らは待っています。</span></li>
-            </ul>
-          </article>
-          <article class="lesson-card">
-            <span class="step-number">04</span>
-            <h3>Us / them</h3>
-            <p class="jp">us = 私たちに、them = 彼らに / それらを</p>
-            <ul>
-              <li><button data-speak="Please help us.">Please help us.</button><span>私たちを手伝ってください。</span></li>
-              <li><button data-speak="Put them here.">Put them here.</button><span>それらをここに置いてください。</span></li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="section calendar-section" id="calendar">
+      <section class="section calendar-section page" id="calendar" data-page="calendar">
         <div class="section-heading">
           <p class="eyebrow">Cat review calendar</p>
           <h2>2ヶ月のねこ復習カレンダー</h2>
@@ -179,7 +183,47 @@
         </div>
       </section>
 
-      <section class="section builder-section" id="builder">
+      <section class="section exercises-section page" id="exercises" data-page="exercises">
+        <div class="section-heading">
+          <p class="eyebrow">Smart exercises</p>
+          <h2>緑なら正解、赤ならもう一度</h2>
+          <p>覚えた単語とフレーズを、選択・穴埋め・メール文で練習します。</p>
+        </div>
+
+        <div class="exercise-dashboard">
+          <div class="score-card">
+            <p class="builder-label">Score</p>
+            <h3 id="exerciseScore">0 / 0</h3>
+            <button class="secondary-action" id="resetExercises" type="button">Reset</button>
+          </div>
+          <div class="exercise-list" id="exerciseList"></div>
+        </div>
+      </section>
+
+      <section class="section email-section page" id="email" data-page="email">
+        <div class="section-heading">
+          <p class="eyebrow">Email & office English</p>
+          <h2>メールと仕事でよく使う表現</h2>
+          <p>短いメール、依頼、確認、返信で使える安全な表現です。</p>
+        </div>
+
+        <div class="email-layout">
+          <div class="email-phrase-list" id="emailPhraseList"></div>
+          <div class="email-mini-task">
+            <p class="builder-label">Mini writing</p>
+            <h3>空欄に合う英語を選ぶ</h3>
+            <p class="mail-preview">
+              Hello,<br />
+              <span id="emailBlank">_____</span><br />
+              Thank you.
+            </p>
+            <div class="email-options" id="emailOptions"></div>
+            <p class="exercise-feedback" id="emailFeedback"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section builder-section page" id="builder" data-page="builder">
         <div class="section-heading">
           <p class="eyebrow">Sentence builder</p>
           <h2>自分の仕事を英語で言う</h2>
@@ -208,7 +252,7 @@
         </div>
       </section>
 
-      <section class="section phrase-section" id="work">
+      <section class="section phrase-section page" id="work" data-page="work">
         <div class="section-heading">
           <p class="eyebrow">Workplace phrases</p>
           <h2>職場で聞こえやすい短い英語</h2>
@@ -218,7 +262,7 @@
         <div class="phrase-list" id="phraseList"></div>
       </section>
 
-      <section class="section practice-section" id="practice">
+      <section class="section practice-section page" id="practice" data-page="practice">
         <div class="section-heading">
           <p class="eyebrow">Practice</p>
           <h2>今日の3問チェック</h2>
