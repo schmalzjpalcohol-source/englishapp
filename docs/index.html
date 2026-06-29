@@ -217,8 +217,21 @@
 
         <div class="email-layout">
           <div class="email-mini-task">
-            <p class="builder-label">Email tasks</p>
-            <h3>メールで使う英語を選ぶ</h3>
+            <div class="email-task-head">
+              <div>
+                <p class="builder-label">Email tasks</p>
+                <h3>メールで使う英語を選ぶ</h3>
+                <p class="session-meta" id="emailMeta">Email mix</p>
+              </div>
+              <div class="email-score">
+                <span>Score</span>
+                <strong id="emailScore">0 / 0</strong>
+              </div>
+            </div>
+            <div class="score-actions">
+              <button class="secondary-action" id="shuffleEmailTasks" type="button">New email mix</button>
+              <button class="secondary-action" id="resetEmailTasks" type="button">Reset</button>
+            </div>
             <div class="email-task-list" id="emailTaskList"></div>
           </div>
           <div class="email-phrase-list" id="emailPhraseList"></div>

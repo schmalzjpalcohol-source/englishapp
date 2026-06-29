@@ -221,6 +221,10 @@ const resetExercises = document.querySelector("#resetExercises");
 const shuffleExercises = document.querySelector("#shuffleExercises");
 const emailPhraseList = document.querySelector("#emailPhraseList");
 const emailTaskList = document.querySelector("#emailTaskList");
+const emailScore = document.querySelector("#emailScore");
+const emailMeta = document.querySelector("#emailMeta");
+const shuffleEmailTasks = document.querySelector("#shuffleEmailTasks");
+const resetEmailTasks = document.querySelector("#resetEmailTasks");
 
 let quizIndex = 0;
 let selectedArea = 0;
@@ -233,6 +237,9 @@ let quizDirection = "ja-en";
 let exerciseResults = {};
 let activeExerciseItems = [];
 let exerciseSessionNumber = 1;
+let emailResults = {};
+let activeEmailTasks = [];
+let emailSessionNumber = 1;
 
 const emailPhrases = [
   ["Thank you for your email.", "メールありがとうございます。", "メールの最初で使いやすい丁寧表現。"],
@@ -292,45 +299,259 @@ const emailPhrases = [
 const emailTasks = [
   {
     id: "mail1",
-    title: "確認をお願いする",
+    category: "Confirm",
+    title: "Confirm something",
     prompt: "Hello,\n_____\nThank you.",
     answer: "Could you please confirm this?",
-    options: ["Could you please confirm this?", "Watch your step.", "It's too heavy."],
+    options: ["Could you please confirm this?", "Please ignore my previous email.", "That works for me."],
   },
   {
     id: "mail2",
-    title: "添付ファイル",
+    category: "Attachment",
+    title: "Send an attachment",
     prompt: "Hello,\n_____\nBest regards,",
     answer: "Please find the attached file.",
-    options: ["Please find the attached file.", "Do I need gloves?", "Where is my station?"],
+    options: ["Please find the attached file.", "Could you confirm the price?", "There may be a delay."],
   },
   {
     id: "mail3",
-    title: "返信を待ってもらう",
+    category: "Reply",
+    title: "Need time to answer",
     prompt: "Thank you for your email.\n_____\nBest regards,",
     answer: "I will check and get back to you.",
-    options: ["I will check and get back to you.", "The box is damaged.", "Use both hands."],
+    options: ["I will check and get back to you.", "Please reply by Friday.", "Best regards,"],
   },
   {
     id: "mail4",
-    title: "詳細を依頼する",
+    category: "Request",
+    title: "Ask for details",
     prompt: "Hello,\n_____\nThank you.",
     answer: "Could you send me the details?",
-    options: ["Could you send me the details?", "I'm going to break.", "Put it down."],
+    options: ["Could you send me the details?", "Thank you for the update.", "That should be fine."],
   },
   {
     id: "mail5",
-    title: "遅れた時",
+    category: "Delay",
+    title: "Apologize for a delay",
     prompt: "Hello,\n_____\nI will send it today.",
     answer: "I apologize for the delay.",
-    options: ["I apologize for the delay.", "I understand.", "Take a break."],
+    options: ["I apologize for the delay.", "Could you share the schedule?", "I agree with your suggestion."],
   },
   {
     id: "mail6",
-    title: "締めの一文",
+    category: "Closing",
+    title: "Close with a helpful line",
     prompt: "Best regards,\n_____\n",
     answer: "Please let me know if you have any questions.",
-    options: ["Please let me know if you have any questions.", "The order is wrong.", "Follow me."],
+    options: ["Please let me know if you have any questions.", "Please check the highlighted part.", "I will arrange a meeting."],
+  },
+  {
+    id: "mail7",
+    category: "Greeting",
+    title: "Start politely",
+    prompt: "Hello,\n_____\nI am writing about the order.",
+    answer: "I hope you are doing well.",
+    options: ["I hope you are doing well.", "The issue has been resolved.", "Please reply by Friday."],
+  },
+  {
+    id: "mail8",
+    category: "Follow-up",
+    title: "Follow up on an old topic",
+    prompt: "Hello,\n_____\nCould you check this again?",
+    answer: "I am writing to follow up.",
+    options: ["I am writing to follow up.", "I attached the revised file.", "Kind regards,"],
+  },
+  {
+    id: "mail9",
+    category: "Deadline",
+    title: "Ask for a reply by Friday",
+    prompt: "Hello,\nCould you confirm the delivery date?\n_____",
+    answer: "Please reply by Friday.",
+    options: ["Please reply by Friday.", "Sorry for the confusion.", "I will ask the person in charge."],
+  },
+  {
+    id: "mail10",
+    category: "Attachment",
+    title: "Send a revised file",
+    prompt: "Hello,\n_____\nPlease check the highlighted part.",
+    answer: "I attached the revised file.",
+    options: ["I attached the revised file.", "That should be fine.", "Can we have a short meeting?"],
+  },
+  {
+    id: "mail11",
+    category: "Clarify",
+    title: "Ask for clarification",
+    prompt: "Hello,\n_____\nThank you in advance.",
+    answer: "Could you clarify this point?",
+    options: ["Could you clarify this point?", "I will update you tomorrow.", "Thank you for your quick response."],
+  },
+  {
+    id: "mail12",
+    category: "Delivery",
+    title: "Confirm a delivery date",
+    prompt: "Hello,\n_____\nBest regards,",
+    answer: "Could you confirm the delivery date?",
+    options: ["Could you confirm the delivery date?", "Please see my comments below.", "Thank you for your support."],
+  },
+  {
+    id: "mail13",
+    category: "Quantity",
+    title: "Confirm quantity",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Could you confirm the quantity?",
+    options: ["Could you confirm the quantity?", "I will arrange a meeting.", "The issue has been resolved."],
+  },
+  {
+    id: "mail14",
+    category: "Price",
+    title: "Confirm price",
+    prompt: "Hello,\n_____\nBest regards,",
+    answer: "Could you confirm the price?",
+    options: ["Could you confirm the price?", "Please ignore my previous email.", "Thank you for your understanding."],
+  },
+  {
+    id: "mail15",
+    category: "Schedule",
+    title: "Ask for the schedule",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Could you share the schedule?",
+    options: ["Could you share the schedule?", "The file is too large to attach.", "That works for me."],
+  },
+  {
+    id: "mail16",
+    category: "Comment",
+    title: "Point to comments below",
+    prompt: "Hello,\n_____\nBest regards,",
+    answer: "Please see my comments below.",
+    options: ["Please see my comments below.", "Are you available tomorrow?", "I am not sure yet."],
+  },
+  {
+    id: "mail17",
+    category: "Details",
+    title: "Point to details below",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Please see the details below.",
+    options: ["Please see the details below.", "I will send it separately.", "Kind regards,"],
+  },
+  {
+    id: "mail18",
+    category: "Progress",
+    title: "Ask for updates",
+    prompt: "Hello,\n_____\nBest regards,",
+    answer: "Please keep me updated.",
+    options: ["Please keep me updated.", "Could you please check the attachment?", "Sorry for the confusion."],
+  },
+  {
+    id: "mail19",
+    category: "Team",
+    title: "Check with your team",
+    prompt: "Thank you for the update.\n_____\nBest regards,",
+    answer: "I will check with my team.",
+    options: ["I will check with my team.", "The deadline is Friday.", "I agree with your suggestion."],
+  },
+  {
+    id: "mail20",
+    category: "Person",
+    title: "Ask the person in charge",
+    prompt: "Hello,\n_____\nI will update you tomorrow.",
+    answer: "I will ask the person in charge.",
+    options: ["I will ask the person in charge.", "Please check the highlighted part.", "Thank you in advance."],
+  },
+  {
+    id: "mail21",
+    category: "Meeting",
+    title: "Arrange a meeting",
+    prompt: "Hello,\n_____\nDoes this time work for you?",
+    answer: "I will arrange a meeting.",
+    options: ["I will arrange a meeting.", "Could you confirm the quantity?", "Please find the attached file."],
+  },
+  {
+    id: "mail22",
+    category: "Meeting",
+    title: "Ask for a short meeting",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Can we have a short meeting?",
+    options: ["Can we have a short meeting?", "I have attached the file.", "There may be a delay."],
+  },
+  {
+    id: "mail23",
+    category: "Meeting",
+    title: "Ask about tomorrow",
+    prompt: "Hello,\n_____\nBest regards,",
+    answer: "Are you available tomorrow?",
+    options: ["Are you available tomorrow?", "Please see the details below.", "I will send it separately."],
+  },
+  {
+    id: "mail24",
+    category: "Meeting",
+    title: "Confirm the time",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "Does this time work for you?",
+    options: ["Does this time work for you?", "Could you please send the latest version?", "The issue has been resolved."],
+  },
+  {
+    id: "mail25",
+    category: "Agreement",
+    title: "Agree with a suggestion",
+    prompt: "Thank you for your idea.\n_____\nBest regards,",
+    answer: "I agree with your suggestion.",
+    options: ["I agree with your suggestion.", "I apologize for the delay.", "Could you confirm the price?"],
+  },
+  {
+    id: "mail26",
+    category: "Agreement",
+    title: "Accept a plan",
+    prompt: "Hello,\n_____\nThank you.",
+    answer: "That works for me.",
+    options: ["That works for me.", "Please keep me updated.", "I am writing to follow up."],
+  },
+  {
+    id: "mail27",
+    category: "Unclear",
+    title: "Say it is not confirmed",
+    prompt: "Hello,\n_____\nI will update you tomorrow.",
+    answer: "I am not sure yet.",
+    options: ["I am not sure yet.", "Best regards,", "Could you send me the details?"],
+  },
+  {
+    id: "mail28",
+    category: "Delay",
+    title: "Warn about a delay",
+    prompt: "Hello,\n_____\nWe are checking the issue.",
+    answer: "There may be a delay.",
+    options: ["There may be a delay.", "Please reply by Friday.", "Thank you for your quick response."],
+  },
+  {
+    id: "mail29",
+    category: "Issue",
+    title: "Say the issue is being checked",
+    prompt: "Hello,\n_____\nI will update you tomorrow.",
+    answer: "We are checking the issue.",
+    options: ["We are checking the issue.", "Could you please confirm this?", "That should be fine."],
+  },
+  {
+    id: "mail30",
+    category: "Issue",
+    title: "Say the issue is resolved",
+    prompt: "Hello,\n_____\nThank you for your patience.",
+    answer: "The issue has been resolved.",
+    options: ["The issue has been resolved.", "Please see my comments below.", "Can we have a short meeting?"],
+  },
+  {
+    id: "mail31",
+    category: "Correction",
+    title: "Correct a previous email",
+    prompt: "Hello,\n_____\nSorry for the confusion.",
+    answer: "Please ignore my previous email.",
+    options: ["Please ignore my previous email.", "Could you share the schedule?", "I will check with my team."],
+  },
+  {
+    id: "mail32",
+    category: "Closing",
+    title: "End with thanks in advance",
+    prompt: "Could you please check the attachment?\n_____\nBest regards,",
+    answer: "Thank you in advance.",
+    options: ["Thank you in advance.", "I will arrange a meeting.", "There may be a delay."],
   },
 ];
 
@@ -664,14 +885,42 @@ function renderEmailPhrases() {
       `,
     )
     .join("");
+}
 
-  emailTaskList.innerHTML = emailTasks
+function updateEmailScore() {
+  const activeIds = new Set(activeEmailTasks.map((task) => task.id));
+  const answered = Object.entries(emailResults)
+    .filter(([id]) => activeIds.has(id))
+    .map(([, result]) => result);
+  const correct = answered.filter(Boolean).length;
+  emailScore.textContent = `${correct} / ${activeEmailTasks.length}`;
+  emailMeta.textContent = `Mix ${emailSessionNumber} · ${activeEmailTasks.length} of ${emailTasks.length} tasks`;
+}
+
+function buildEmailSession() {
+  const byCategory = emailTasks.reduce((groups, task) => {
+    groups[task.category] = groups[task.category] || [];
+    groups[task.category].push(task);
+    return groups;
+  }, {});
+  const categoryStarters = shuffleArray(Object.values(byCategory))
+    .slice(0, 5)
+    .map((group) => shuffleArray(group)[0])
+    .filter(Boolean);
+  const remaining = shuffleArray(emailTasks.filter((task) => !categoryStarters.some((starter) => starter.id === task.id)));
+  activeEmailTasks = shuffleArray([...categoryStarters, ...remaining.slice(0, 3)]);
+}
+
+function renderEmailTasks() {
+  if (!activeEmailTasks.length) buildEmailSession();
+  emailTaskList.innerHTML = activeEmailTasks
     .map(
       (task, index) => `
         <article class="email-task" data-email-task="${task.id}">
           <div class="exercise-topline">
             <span>${String(index + 1).padStart(2, "0")}</span>
             <strong>${task.title}</strong>
+            <small>${task.category}</small>
           </div>
           <p class="mail-preview">${task.prompt.replace(/\n/g, "<br />").replace("_____", "<mark>_____</mark>")}</p>
           <div class="email-options">
@@ -684,6 +933,26 @@ function renderEmailPhrases() {
       `,
     )
     .join("");
+  updateEmailScore();
+}
+
+function answerEmailTask(id, value) {
+  const task = activeEmailTasks.find((item) => item.id === id);
+  if (!task) return;
+  const card = document.querySelector(`[data-email-task="${task.id}"]`);
+  const feedback = document.querySelector(`#email-feedback-${task.id}`);
+  const isCorrect = value === task.answer;
+  emailResults[id] = isCorrect;
+
+  card.classList.toggle("is-correct", isCorrect);
+  card.classList.toggle("is-wrong", !isCorrect);
+  feedback.textContent = isCorrect ? "正解です。メールの流れに合っています。" : `もう一度。正解は: ${task.answer}`;
+  card.querySelector("mark").textContent = value;
+  card.querySelectorAll("[data-email-answer]").forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.value === value);
+    button.classList.toggle("is-answer", button.dataset.value === task.answer);
+  });
+  updateEmailScore();
 }
 
 function updateExerciseScore() {
@@ -1165,19 +1434,7 @@ document.addEventListener("click", (event) => {
 
   const emailAnswer = event.target.closest("[data-email-answer]");
   if (emailAnswer) {
-    const task = emailTasks.find((item) => item.id === emailAnswer.dataset.emailAnswer);
-    if (!task) return;
-    const card = document.querySelector(`[data-email-task="${task.id}"]`);
-    const feedback = document.querySelector(`#email-feedback-${task.id}`);
-    const isCorrect = emailAnswer.dataset.value === task.answer;
-    card.classList.toggle("is-correct", isCorrect);
-    card.classList.toggle("is-wrong", !isCorrect);
-    feedback.textContent = isCorrect ? "正解です。メールの流れに合っています。" : `もう一度。正解は: ${task.answer}`;
-    card.querySelector("mark").textContent = emailAnswer.dataset.value;
-    card.querySelectorAll("[data-email-answer]").forEach((button) => {
-      button.classList.toggle("is-selected", button === emailAnswer);
-      button.classList.toggle("is-answer", button.dataset.value === task.answer);
-    });
+    answerEmailTask(emailAnswer.dataset.emailAnswer, emailAnswer.dataset.value);
     return;
   }
 
@@ -1262,10 +1519,21 @@ shuffleExercises.addEventListener("click", () => {
   buildExerciseSession();
   renderExercises();
 });
+resetEmailTasks.addEventListener("click", () => {
+  emailResults = {};
+  renderEmailTasks();
+});
+shuffleEmailTasks.addEventListener("click", () => {
+  emailResults = {};
+  emailSessionNumber += 1;
+  buildEmailSession();
+  renderEmailTasks();
+});
 window.addEventListener("hashchange", () => showPage(getPageFromHash()));
 
 renderPhrases();
 renderEmailPhrases();
+renderEmailTasks();
 renderExercises();
 renderBuilderOptions();
 renderBuiltSentence();
