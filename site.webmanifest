@@ -1,0 +1,17 @@
+{
+  "name": "Green Step English",
+  "short_name": "Green Step",
+  "description": "English practice for Japanese beginners.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbfdf8",
+  "theme_color": "#2f7d52",
+  "icons": [
+    {
+      "src": "assets/study-cat.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
